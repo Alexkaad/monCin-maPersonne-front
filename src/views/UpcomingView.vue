@@ -2,6 +2,7 @@
 
 import {onMounted, ref} from "vue";
 import {movieService} from "@/service/TmbdService";
+import CardFilm from "@/components/CardFilm.vue";
 
 const films = ref<any[]>([]);
 const loading = ref<boolean>(false);
@@ -88,7 +89,7 @@ onMounted(() => {
           <div class="pagination align-items-center ">
             <button class="btn btn btn-outline-warning "
                     :disabled="current_pages === 1"
-                    @click="changePage(current_pages - 1)"
+                    @click="(event)=>changePage(current_pages - 1,event)"
             >
               Précédent
             </button>

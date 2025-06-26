@@ -5,35 +5,36 @@ import {movieService} from "@/service/TmbdService";
 import CardFilm from "@/components/CardFilm.vue";
 import MoviePagination from "@/components/MoviePagination.vue";
 
-
 const films = ref<any[]>([]);
 const loading = ref<boolean>(false);
 const total_pages = ref<number>(0);
 const current_pages = ref<number>(1);
 
 
-const loadMovies = async (page: number = 1) => {
+const loadMoviesPopular = async (page: number = 1) => {
 
   try {
 
     loading.value = true;
-    const response = await movieService.getUpcomingMovies(page);
-    films.value = response.results.map((film: {
+    const response = await movieService.getPopular(page);
+
+    films.value = response.results.map((film : {
       title: string;
       poster_path: string;
       release_date: string;
-    }) => {
+    })=> {
       return {
         title: film.title,
         poster_path: film.poster_path,
         release_date: film.release_date
       }
-    });
+        });
+
     total_pages.value = response.total_pages;
     current_pages.value = page;
     loading.value = false;
 
-  } catch (error) {
+  }catch (error) {
 
     console.log(error);
     throw error;
@@ -43,23 +44,18 @@ const loadMovies = async (page: number = 1) => {
   }
 }
 
-
-
 onMounted(() => {
 
-  loadMovies();
-
+  loadMoviesPopular();
 })
-
-
 </script>
 
 <template>
 
-  <div class="container-fluid upcoming-movies overflow-scrollable p-5">
+  <div class="container-fluid popular-movies-princ overflow-scrollable p-5">
 
     <div class="pagination">
-      <div class="container-fluid upcoming-movies overflow-scrollable">
+      <div class="container-fluid popular-movies overflow-scrollable">
         <div class="d-flex justify-content-start  p-5  ">
           <h3 class="titre-princ ">Films à venir</h3>
         </div>
@@ -78,20 +74,22 @@ onMounted(() => {
             </div>
           </div>
         </div>
-      <MoviePagination :total_pages="total_pages"
-                       :current_page="current_pages"
-                        @pageChange="loadMovies">
 
-      </MoviePagination>
+        <MoviePagination
+            :total_pages="total_pages"
+            :current_page="current_pages"
+            @pageChange="loadMoviesPopular"
+            />
       </div>
     </div>
   </div>
+
 
 </template>
 
 <style scoped>
 
-.upcoming-movies {
+.popular-movies {
   min-height: 100vh;
 }
 

@@ -1,6 +1,7 @@
 import  {createRouter, createWebHistory} from 'vue-router'
 
 import UpcomingView  from "@/views/UpcomingView.vue";
+import PopularView  from "@/views/PopularView.vue";
 
 const routes = [
 
@@ -16,6 +17,12 @@ const routes = [
         name: 'UpcomingMovies',
         component: UpcomingView
     },
+
+    {
+        path: '/popular',
+        name: 'PopularMovies',
+        component: PopularView
+    }
 ]
 
 

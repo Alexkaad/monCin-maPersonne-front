@@ -20,5 +20,19 @@ export const movieService = {
             console.error('Erreur:', error.response.data || error);
             throw error;
         }
+    },
+
+    async getPopular(page:number = 1) {
+
+        try {
+            const response = await apiClient.get('/films/popular',{
+                params: {page}
+            });
+         return response.data;
+
+        }catch (error: any) {
+            console.error('Erreur:', error.response.data || error);
+            throw error;
+        }
     }
 }

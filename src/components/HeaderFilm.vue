@@ -62,11 +62,11 @@
   list-style: none;
   text-decoration: none;
   color: white;
-  padding: 5px;
+
 }
 
 li {
-  padding: 5px;
+  padding: 20px;
 }
 
 /* Nouvelle règle pour coller le titre et l'icône */

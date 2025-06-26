@@ -1,17 +1,18 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <nav>
+    <header-film></header-film>
+
+  </nav>
+  <router-view></router-view>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup lang="ts">
+import HeaderFilm from './components/HeaderFilm.vue';
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+
+
+
+// Utilisation de la Composition API au lieu de Class Component
 </script>
 
 <style>
@@ -21,6 +22,17 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+
+}
+
+
+nav a {
+  color: #2c3e50;
+  text-decoration: none;
+  padding: 10px;
+}
+
+nav a.router-link-active {
+  color: #42b983;
 }
 </style>

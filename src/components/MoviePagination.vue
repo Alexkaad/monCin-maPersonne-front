@@ -1,12 +1,13 @@
 <script setup lang="ts">
 const props = defineProps<{
   total_pages: number,
-  current_page: number,
+  current_pages: number,
 }>();
 
 const emit = defineEmits(['pageChange']);
 
-const onChangePage = (newPage: number, event: Event): void => {
+const onChangePage = (newPage: number, event: Event | undefined = undefined
+): void => {
   if (event) {
     event.preventDefault();
   }
@@ -21,14 +22,14 @@ const onChangePage = (newPage: number, event: Event): void => {
   <div class="pagination d-flex align-content-center justify-content-center">
     <div class="pagination align-items-center">
       <button class="btn btn-outline-warning"
-              :disabled="current_page === 1"
-              @click="(e: Event) => onChangePage(current_page - 1, e)">
+              :disabled="current_pages === 1"
+              @click="(e: Event) => onChangePage(current_pages - 1, e)">
         Précédent
       </button>
-      <span class="p-1">Page {{ current_page }} sur {{ total_pages }}</span>
+      <span class="p-1">Page {{ current_pages }} sur {{ total_pages }}</span>
       <button class="btn btn-outline-success"
-              :disabled="current_page === total_pages"
-              @click="(e: Event) => onChangePage(current_page + 1, e)">
+              :disabled="current_pages === total_pages"
+              @click="(e: Event) => onChangePage(current_pages + 1, e)">
         Suivant
       </button>
     </div>

@@ -10,7 +10,6 @@ import router from "@/router/index.";
 
 const app = createApp(App)
     app.use(router)
-   app.mount('#app')
 
 if (process.env.NODE_ENV === 'development') {
     app.config.performance = true
@@ -20,5 +19,5 @@ if (process.env.NODE_ENV === 'development') {
         label: 'My App',
         app
     })
-
+    app.mount('#app')
 }

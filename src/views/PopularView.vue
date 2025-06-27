@@ -77,7 +77,7 @@ onMounted(() => {
 
         <MoviePagination
             :total_pages="total_pages"
-            :current_page="current_pages"
+            :current_pages="current_pages"
             @pageChange="loadMoviesPopular"
             />
       </div>

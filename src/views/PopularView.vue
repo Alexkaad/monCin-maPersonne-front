@@ -11,6 +11,7 @@ const total_pages = ref<number>(0);
 const current_pages = ref<number>(1);
 
 
+
 const loadMoviesPopular = async (page: number = 1) => {
 
   try {
@@ -19,11 +20,13 @@ const loadMoviesPopular = async (page: number = 1) => {
     const response = await movieService.getPopular(page);
 
     films.value = response.results.map((film : {
+      id: number;
       title: string;
       poster_path: string;
       release_date: string;
     })=> {
       return {
+        id: film.id,
         title: film.title,
         poster_path: film.poster_path,
         release_date: film.release_date
@@ -67,6 +70,7 @@ onMounted(() => {
           <div class="row row-cols-5 g-4">
             <div class="col" v-for="film in films" :key="film.id">
               <CardFilm
+                  :id="film.id"
                   :title="film.title"
                   :poster_path="'https://image.tmdb.org/t/p/w500' +film.poster_path"
                   :release_date="film.release_date"

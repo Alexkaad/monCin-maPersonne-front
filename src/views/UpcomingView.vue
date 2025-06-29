@@ -19,14 +19,19 @@ const loadMovies = async (page: number = 1) => {
     loading.value = true;
     const response = await movieService.getUpcomingMovies(page);
     films.value = response.results.map((film: {
+      id: number;
       title: string;
       poster_path: string;
       release_date: string;
+      Spoken_languages: string;
     }) => {
       return {
+        id: film.id,
         title: film.title,
         poster_path: film.poster_path,
-        release_date: film.release_date
+        release_date: film.release_date,
+        Spoken_languages: film.Spoken_languages,
+
       }
     });
     total_pages.value = response.total_pages;
@@ -74,7 +79,7 @@ onMounted(() => {
                   :title="film.title"
                   :poster_path="'https://image.tmdb.org/t/p/w500' +film.poster_path"
                   :release_date="film.release_date"
-              />
+                  :id="film.id"/>
             </div>
           </div>
         </div>

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {ref} from "vue";
+import router from "@/router";
 
-defineProps<{
+const props = defineProps<{
+  id: number,
   title: string,
   poster_path: string,
   release_date: string
@@ -13,6 +15,21 @@ const handleImageLoad = () => {
   imageLoaded.value = true;
 };
 
+const navigateToDetail = () => {
+  console.log('ID du film:', props.id); // Ajoutez cette ligne pour déboguer
+  if (props.id) {
+    router.push({
+      name: 'FilmSingle',
+      params: {
+        id: props.id.toString()
+      }
+    });
+  } else {
+    console.error('ID du film non défini');
+  }
+}
+
+
 
 </script>
 
@@ -20,7 +37,7 @@ const handleImageLoad = () => {
   <div class="container carte-film-style-1">
     <div class="card border-1 border-emphasis card-fixed-size">
       <!-- Correction du placement du skeleton loader -->
-      <div class="img-container position-relative">
+      <div class="img-container position-relative" @click="navigateToDetail()">
         <div v-if="!imageLoaded" class="skeleton-loader"></div>
         <img :src="poster_path || '@/assets/OIP.jpg'"
              @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
@@ -28,6 +45,8 @@ const handleImageLoad = () => {
              class="card-img-top"
              alt="titre-image"
         >
+
+
       </div>
       <div class="card-body d-flex flex-column">
         <h6 class="card-title-bottom fw-bold" style="color:#374558;">{{ title }}</h6>

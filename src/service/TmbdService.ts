@@ -22,6 +22,22 @@ export const movieService = {
         }
     },
 
+    async getNowPlayingMovie(page:number = 1){
+
+        try{
+
+            const response  = await apiClient.get('/films/indoor', {
+                params:{page}
+            });
+          return  response.data
+        }catch (error:any)
+
+        {
+            console.error('Erreur:', error.response.data || error);
+            throw error;
+        }
+    },
+
     async getPopular(page:number = 1) {
 
         try {
@@ -31,6 +47,20 @@ export const movieService = {
          return response.data;
 
         }catch (error: any) {
+            console.error('Erreur:', error.response.data || error);
+            throw error;
+        }
+    },
+
+    async getMovieById(id: number) {
+
+        try {
+            const response = await apiClient.get(`/films/${id}`,
+                {
+                    params: {id}
+                });
+            return response.data;
+        } catch (error: any) {
             console.error('Erreur:', error.response.data || error);
             throw error;
         }

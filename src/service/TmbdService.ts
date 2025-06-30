@@ -64,5 +64,19 @@ export const movieService = {
             console.error('Erreur:', error.response.data || error);
             throw error;
         }
+    },
+
+    async getCreditMovie(id: number) {
+
+        try {
+            const response = await apiClient.get(`/films/${id}/credits`,
+                {
+                    params: {id}
+                });
+            return response.data;
+        } catch (error: any) {
+            console.error('Erreur:', error.response.data || error);
+            throw error;
+        }
     }
 }

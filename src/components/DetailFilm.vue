@@ -19,7 +19,7 @@ defineProps<{
 const posterLoad = ref(false)
 
 
-const handleposterLoad = () => {
+const handlePosterLoad = () => {
   posterLoad.value = true;
 };
 
@@ -40,9 +40,6 @@ const formatRuntime = (runtime: string | number) => {
   return `${hours}h ${remainingMinutes}min`;
 };
 
-
-
-
 </script>
 
 <template>
@@ -60,7 +57,7 @@ const formatRuntime = (runtime: string | number) => {
               <img :src="moviePoster || '@/assets/OIP.jpg'"
                    class="film-poster"
                    @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
-                   @load="handleposterLoad"
+                   @load="handlePosterLoad"
                    alt="image-film">
             </div>
           </div>
@@ -87,7 +84,7 @@ const formatRuntime = (runtime: string | number) => {
               <div class="genres">
                 <span v-for="genre in movieGenres"
                       :key="genre.id"
-                      class="genre-tag">
+                      class="genre-tag bg-primary text-white">
                   {{ genre.name }}
                 </span>
               </div>
@@ -102,11 +99,9 @@ const formatRuntime = (runtime: string | number) => {
       </div>
     </div>
   </div>
-
 </template>
 
 <style scoped>
-
 
 .background-wrapper {
   position: relative;

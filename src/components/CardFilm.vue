@@ -15,6 +15,8 @@ const handleImageLoad = () => {
   imageLoaded.value = true;
 };
 
+
+
 const navigateToDetail = () => {
   console.log('ID du film:', props.id); // Ajoutez cette ligne pour déboguer
   if (props.id) {
@@ -45,12 +47,11 @@ const navigateToDetail = () => {
              class="card-img-top"
              alt="titre-image"
         >
-
-
       </div>
       <div class="card-body d-flex flex-column">
         <h6 class="card-title-bottom fw-bold" style="color:#374558;">{{ title }}</h6>
-        <p class="card-title-bottom release_date fw-bold m-0" style="font-family:Helvetica, sans-serif; color: #979bb5">{{ release_date }}</p>
+        <span class="card-title-bottom release_date fw-bold m-0"
+           style="font-family:Helvetica, sans-serif; color: #979bb5">{{ release_date }}</span>
       </div>
     </div>
   </div>

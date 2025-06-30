@@ -4,10 +4,14 @@ import {onMounted, ref} from "vue";
 import {movieService} from "@/service/TmbdService";
 import {useRoute} from "vue-router";
 import DetailFilm from "@/components/DetailFilm.vue";
+import MainActors from "@/components/MainActors.vue";
 
 const film = ref<any>({});
+const cast = ref<any[]>([]);
 
 const loading = ref<boolean>(false);
+const loadingCast = ref(false)
+
 const route = useRoute();
 
 const LoadFilmSingle = async () => {
@@ -53,9 +57,67 @@ const LoadFilmSingle = async () => {
   }
 }
 
+const fetchCreditMovie = async () => {
+
+
+
+  const movieId = Number(route.params.id);
+
+  if(!movieId)
+  {
+    console.error('Id du film non trouver afin d\'afficher les acteurs');
+    return;
+  }
+
+   try {
+
+    loadingCast.value = true;
+
+    const response = await movieService.getCreditMovie(movieId);
+     console.log('Réponse brute credit:', response); // Pour déboguer
+
+
+     if (!response || !response.cast) {
+       console.error('Données de casting invalides');
+       cast.value = [];
+       return;
+     }
+
+     cast.value = response.cast.map((cast : {
+      id: number,
+      name: string,
+      character: string,
+      profile_path: string | null,
+
+    })=> {
+
+      return {
+        id: cast.id,
+        name: cast.name,
+        role: cast.character, // 'character' de l'API devient 'role' dans notre interface
+        poster_path: cast.profile_path
+            ? `https://image.tmdb.org/t/p/w500${cast.profile_path}`
+            : '@/assets/OIP.jpg',
+      }
+
+   });
+
+
+}catch(error) {
+
+     console.log(error);
+     throw error;
+
+   }finally{
+
+    loadingCast.value = false;
+  }
+}
+
 onMounted(() => {
 
   LoadFilmSingle();
+  fetchCreditMovie();
 })
 </script>
 
@@ -80,9 +142,19 @@ onMounted(() => {
           :movie-spoken-languages="film.languages || ''"
       />
     </div>
+
+    <div v-if="loadingCast" class="loading-container">
+      <div class="spinner"></div>
+      <p>Chargement du casting...</p>
+    </div>
+    <MainActors
+        v-else-if="cast.length > 0"
+        :cast="cast"
+    />
+    <div v-else class="alert alert-info">
+      Aucun acteur disponible pour ce film.
+    </div>
   </div>
-
-
 
 </template>
 
@@ -113,6 +185,13 @@ onMounted(() => {
   margin-bottom: 1rem;
 }
 
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
 
 
 

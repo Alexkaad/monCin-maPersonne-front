@@ -202,9 +202,10 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .film-single-view {
-    padding: 1rem;
+    padding: 0;
   }
 }
+
 
 
 </style>

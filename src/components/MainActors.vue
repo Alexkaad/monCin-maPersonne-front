@@ -31,31 +31,46 @@ const mainCast= computed (() => {
 </script>
 
 <template>
-
   <div class="carrousel-main-actors">
-    <div class="container main-actors-style-1">
-      <!-- Utilisez mainCast au lieu de cast -->
-      <div v-for="actor in mainCast" :key="actor.id" class="card border-1 border-emphasis card-fixed-size">
-        <div class="img-container position-relative">
-          <div v-if="!imageLoaded" class="skeleton-loader"></div>
-          <img :src="actor.poster_path || '@/assets/OIP.jpg'"
-               @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
-               @load="handleImageLoad"
-               class="card-img-top"
-               alt="titre-image"
-          >
-        </div>
-        <div class="card-body d-flex flex-column">
-          <h6 class="card-title-bottom fw-bold" style="color:#374558;">
-            {{ actor.name}}
-          </h6>
-          <span class="card-title-bottom release_date fw-bold m-0"
-                style="font-family:Helvetica, sans-serif; color: #979bb5">
+    <div class="container title-of-mainActor d-flex align-content-start">
+      <h5 class=" fw-bolder d-flex text-align-start ">Têtes d'affiche</h5>
+    </div>
+
+
+      <div class="container main-actors-style-1">
+        <!-- Utilisez mainCast au lieu de cast -->
+        <div v-for="actor in mainCast" :key="actor.id" class="card border-1 border-emphasis card-fixed-size">
+          <div class="img-container position-relative">
+            <div v-if="!imageLoaded" class="skeleton-loader"></div>
+            <img :src="actor.poster_path || '@/assets/OIP.jpg'"
+                 @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
+                 @load="handleImageLoad"
+                 class="card-img-top"
+                 alt="titre-image"
+            >
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h6 class="card-title-bottom fw-bold" style="color:#374558;">
+              {{ actor.name }}
+            </h6>
+            <span class="card-title-bottom release_date fw-bold m-0"
+                  style="font-family:Helvetica, sans-serif; color: #979bb5">
             {{ actor.role }}
           </span>
+          </div>
         </div>
       </div>
+
+    <div class="container show-list p-5">
+      <div class="lien-wrapper d-flex justify-content-start" style="width: 100%; margin-right: 200px;">
+      <span class="fw-bold lien-cliclable mb-3">
+        Voir la liste complete des distributions des rôles et equipe technique
+      </span>
+
+      </div>
+      <hr>
     </div>
+
   </div>
 
 
@@ -78,6 +93,16 @@ const mainCast= computed (() => {
 .img-container {
   height: 200px; /* Réduit de 340px à 200px */
   overflow: hidden;
+}
+
+.lien-cliclable {
+  display: inline-block;
+  cursor: pointer;
+  transition: color 0.1s ease;
+}
+
+.lien-cliclable:hover {
+  color: #007bff;
 }
 
 .img-container img {
@@ -107,6 +132,13 @@ const mainCast= computed (() => {
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
+}
+
+.title-of-mainActor {
+  display: flex;
+  justify-content: start;
+  margin-left: 125px;
+
 }
 
 .skeleton-loader {

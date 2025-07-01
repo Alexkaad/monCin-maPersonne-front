@@ -201,7 +201,7 @@ const formatRuntime = (runtime: string | number) => {
 
 .synopsis p {
   line-height: 1.6;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #e0e0e0;
 }
 

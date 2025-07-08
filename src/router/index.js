@@ -33,6 +33,13 @@ const routes = [
     },
 
     {
+        path: '/Cast&Crew/:id',
+        name: 'Cast&Crew',
+        component: () => import('@/views/CastAndCrew.vue'),
+        props: true
+    },
+
+    {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
         component: () => import('@/views/NotFound.vue') // Créez ce composant

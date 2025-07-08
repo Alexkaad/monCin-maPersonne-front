@@ -9,7 +9,7 @@ module.exports = defineConfig({
     devtool: 'source-map',
     performance: {
       hints: false
-  }
+    }
 
   },
 
@@ -17,4 +17,5 @@ module.exports = defineConfig({
     config.set('devtool', 'source-map')
   }
 
-})
+
+});

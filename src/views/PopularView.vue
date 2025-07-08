@@ -12,7 +12,7 @@ const current_pages = ref<number>(1);
 
 
 
-const loadMoviesPopular = async (page: number = 1) => {
+const loadMoviesPopular = async (page = 1) => {
 
   try {
 
@@ -29,7 +29,12 @@ const loadMoviesPopular = async (page: number = 1) => {
         id: film.id,
         title: film.title,
         poster_path: film.poster_path,
-        release_date: film.release_date
+        release_date: new Date(film.release_date).toLocaleDateString('fr-FR', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        }),
+
       }
         });
 

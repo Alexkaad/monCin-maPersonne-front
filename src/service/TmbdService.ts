@@ -10,7 +10,7 @@ const apiClient = axios.create({
 })
 
 export const movieService = {
-    async getUpcomingMovies(page: number = 1) {
+    async getUpcomingMovies(page = 1) {
         try {
             const response = await apiClient.get('/films/upcoming', {
                 params: {page}
@@ -22,7 +22,7 @@ export const movieService = {
         }
     },
 
-    async getNowPlayingMovie(page:number = 1){
+    async getNowPlayingMovie(page = 1){
 
         try{
 
@@ -38,7 +38,7 @@ export const movieService = {
         }
     },
 
-    async getPopular(page:number = 1) {
+    async getPopular(page = 1) {
 
         try {
             const response = await apiClient.get('/films/popular',{

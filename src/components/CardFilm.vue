@@ -50,7 +50,7 @@ const navigateToDetail = () => {
       </div>
       <div class="card-body d-flex flex-column">
         <h6 class="card-title-bottom fw-bold" style="color:#374558;">{{ title }}</h6>
-        <span class="card-title-bottom release_date fw-bold m-0"
+        <span class="card-title-bottom release_date fw-light m-0"
            style="font-family:Helvetica, sans-serif; color: #979bb5">{{ release_date }}</span>
       </div>
     </div>

@@ -63,7 +63,7 @@ const mainCast= computed (() => {
 
     <div class="container show-list p-5">
       <div class="lien-wrapper d-flex justify-content-start" style="width: 100%; margin-right: 200px;">
-      <span class="fw-bold lien-cliclable mb-3">
+      <span class="fw-bold lien-cliclable mb-3" @click="$router.push({name: 'Cast&Crew'})">
         Voir la liste complete des distributions des rôles et equipe technique
       </span>
 

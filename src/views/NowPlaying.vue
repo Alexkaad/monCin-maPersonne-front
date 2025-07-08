@@ -17,7 +17,7 @@ const total_pages = ref<number>(0);
 const current_pages = ref<number>(1);
 
 
-const loadMoviesNowPlaying = async (page: number = 1) => {
+const loadMoviesNowPlaying = async (page = 1) => {
 
   try {
 
@@ -32,7 +32,12 @@ const loadMoviesNowPlaying = async (page: number = 1) => {
       return {
         title: film.title,
         poster_path: film.poster_path,
-        release_date: film.release_date
+        release_date: new Date(film.release_date).toLocaleDateString('fr-FR', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        }),
+
       }
     });
 

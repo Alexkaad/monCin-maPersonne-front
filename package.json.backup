@@ -29,16 +29,38 @@
     "@vue/devtools": "^7.7.7",
     "@vue/eslint-config-typescript": "^11.0.3",
     "@vue/tsconfig": "^0.7.0",
-    "cross-spawn": "^7.0.3",
+    "cross-spawn": "^7.0.6",
     "eslint": "^8.56.0",
     "eslint-plugin-vue": "^9.21.1",
     "husky": "^9.1.7",
-    "ip": "^2.0.0",
-    "postcss": "^8.4.31",
+    "ip": "^2.0.1",
+    "postcss": "^8.5.6",
     "tough-cookie": "^5.1.2",
     "typescript": "^5.1.6",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^5.2.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true,
+      "vue/setup-compiler-macros": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended",
+      "@vue/typescript"
+    ],
+    "parserOptions": {
+      "parser": "@typescript-eslint/parser"
+    },
+    "globals": {
+      "defineProps": "readonly",
+      "defineEmits": "readonly",
+      "defineExpose": "readonly",
+      "withDefaults": "readonly"
+    },
+    "rules": {}
   },
   "browserslist": [
     "> 1%",

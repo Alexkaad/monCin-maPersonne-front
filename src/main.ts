@@ -19,5 +19,5 @@ if (process.env.NODE_ENV === 'development') {
         label: 'My App',
         app
     })
-    app.mount('#app')
 }
+app.mount('#app')

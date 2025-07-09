@@ -10,6 +10,7 @@ const films = ref<any[]>([]);
 const loading = ref<boolean>(false);
 const total_pages = ref<number>(0);
 const current_pages = ref<number>(1);
+const filteredResults = ref<any[]>([]);
 
 
 const loadMovies = async (page = 1) => {
@@ -18,7 +19,16 @@ const loadMovies = async (page = 1) => {
 
     loading.value = true;
     const response = await movieService.getUpcomingMovies(page);
-    films.value = response.results.map((film: {
+    const today = new Date();
+
+    // Étape 1 : filtrer les films dont la date de sortie est dans le futur
+    const filteredResults = response.results.filter((film: {
+      release_date: string;
+    }) => {
+      const releaseDate = new Date(film.release_date);
+      return releaseDate >= today;
+    });
+    films.value = filteredResults.map((film: {
       id: number;
       title: string;
       poster_path: string;

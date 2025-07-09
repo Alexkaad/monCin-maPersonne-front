@@ -1,5 +1,6 @@
 export interface Crew
 {
+    id?: number;
     adult?: boolean;
     credit_id?: number;
     department: string

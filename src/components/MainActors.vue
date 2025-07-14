@@ -31,13 +31,13 @@ const mainCast= computed (() => {
 </script>
 
 <template>
-  <div class="carrousel-main-actors">
-    <div class="container title-of-mainActor d-flex align-content-start">
-      <h5 class=" fw-bolder d-flex text-align-start ">Têtes d'affiche</h5>
+  <div class="carrousel-main-actors mt-1 d-flex flex-column align-items-center ">
+    <div class="container title-of-mainActor ">
+      <h5 class=" title-actor ">Têtes d'affiche</h5>
     </div>
 
 
-      <div class="container main-actors-style-1">
+      <div class="container main-actors-style-1 " >
         <!-- Utilisez mainCast au lieu de cast -->
         <div v-for="actor in mainCast" :key="actor.id" class="card border-1 border-emphasis card-fixed-size">
           <div class="img-container position-relative">
@@ -61,9 +61,9 @@ const mainCast= computed (() => {
         </div>
       </div>
 
-    <div class="container show-list p-5">
-      <div class="lien-wrapper d-flex justify-content-start" style="width: 100%; margin-right: 200px;">
-      <span class="fw-bold lien-cliclable mb-3" @click="$router.push({name: 'Cast&Crew'})">
+    <div class="container show-list mt-5 ">
+      <div class="lien-wrapper d-flex justify-content-start p-2" style="width: 100%;">
+      <span class="fw-bold lien-cliclable " @click="$router.push({name: 'Cast&Crew'})">
         Voir la liste complete des distributions des rôles et equipe technique
       </span>
 
@@ -78,27 +78,20 @@ const mainCast= computed (() => {
 
 <style scoped>
 
-.card-fixed-size {
-  width: 8rem;  /* Réduit de 12rem à 8rem */
-  height: 280px; /* Réduit de 400px à 280px */
-  border-radius: 10px;
-  margin: 10px;
-  transition: transform 0.3s ease;
-}
+
 
 .card-fixed-size:hover {
   transform: scale(1.05);
 }
 
-.img-container {
-  height: 200px; /* Réduit de 340px à 200px */
-  overflow: hidden;
-}
+
 
 .lien-cliclable {
   display: inline-block;
   cursor: pointer;
   transition: color 0.1s ease;
+
+
 }
 
 .lien-cliclable:hover {
@@ -110,10 +103,33 @@ const mainCast= computed (() => {
   height: 100%;
   object-fit: cover;
 }
+.main-actors-style-1 {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 5px !important;        /* Réduit l'espace entre les cards */
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.card-fixed-size {
+  width: 120px !important;    /* Largeur fixe plus petite */
+  height: 250px !important;   /* Hauteur réduite */
+  margin: 0 !important;       /* Supprime toutes les marges */
+  padding: 0 !important;
+  border: none !important;    /* Supprime les bordures si nécessaire */
+  box-sizing: border-box !important;
+}
+
+.img-container {
+  height: 150px !important;   /* Réduit la hauteur de l'image */
+  width: 100% !important;
+}
 
 .card-body {
-  padding: 0.5rem;
+  padding: 0.25rem !important; /* Réduit le padding du corps de la card */
 }
+
 
 .card-title-bottom {
   font-size: 0.8rem;
@@ -127,17 +143,12 @@ const mainCast= computed (() => {
   padding: 20px 0;
 }
 
-.main-actors-style-1 {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
+
 
 .title-of-mainActor {
   display: flex;
   justify-content: start;
-  margin-left: 125px;
+
 
 }
 
@@ -152,6 +163,8 @@ const mainCast= computed (() => {
   animation: loading 1.5s infinite;
 }
 
+
+
 @keyframes loading {
   0% {
     background-position: 200% 0;
@@ -160,6 +173,126 @@ const mainCast= computed (() => {
     background-position: -200% 0;
   }
 }
+@media (min-width: 768px) and (max-width: 992px){
+  .main-actors-style-1 {
+    display: grid;
+    margin: 0 !important;
+    padding: 15px ! important;
+    grid-template-columns: repeat(3, minmax(auto, 1fr)) !important;
+    gap: 3px !important;
+  }
+
+  .card-fixed-size {
+    width: 100px !important;
+    height: 230px !important;
+  }
+
+  .img-container {
+    height: 150px !important;
+  }
+
+  .show-list{
+
+  padding:0 !important;
+  margin: 0 !important;
+}
+
+
+  .lien-wrapper {
+    margin: 0 !important;
+  }
+
+  .lien-cliclable {
+    display: block;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.2;
+    margin-top: 20px;
+    font-size: 0.90rem;
+
+  }
+
+
+  .title-actor{
+
+   font-weight: bold;
+   margin:0;
+
+   .title-of-mainActor{
+
+     margin: 0;
+     padding-right: 160px;
+     justify-content: space-around;
+   }
+
+
+  }
+
+
+  }
+
+@media screen and (min-width: 320px) and (max-width: 475px){
+
+  .main-actors-style-1 {
+    display: grid;
+    margin: 0 !important;
+    padding: 10px ! important;
+    grid-template-columns: repeat(2, minmax(auto, 1fr)) !important;
+    gap: 3px !important;
+  }
+
+
+  .skeleton-loader{
+
+    padding-top: 5px;
+  }
+  .card-fixed-size {
+    width: 75px !important;
+    height: 180px !important;
+  }
+
+  .img-container {
+    height: 120px !important;
+  }
+
+  .show-list{
+
+    padding:0 !important;
+    margin: 0 !important;
+  }
+
+
+  .lien-wrapper {
+    margin: 0 !important;
+    padding: 1px !important;
+  }
+
+  .lien-cliclable {
+    display: block !important;
+    white-space: normal!important;
+    word-wrap: break-word !important;
+    line-height: 1;
+    font-size: 0.63rem !important;
+
+  }
+
+
+  .title-actor {
+
+    font-weight: bold;
+    margin: 0;
+    font-size: 0.8rem;
+
+    .title-of-mainActor {
+
+      margin: 0;
+      padding-right: 100px;
+      justify-content: space-around;
+    }
+
+  }
+}
+
 
 
 </style>

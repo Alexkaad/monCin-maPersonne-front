@@ -161,10 +161,12 @@ onMounted(() => {
 <style scoped>
 
 .film-single-view {
-  height: 30% ! important;
   max-width: 100%;
   padding:0  !important;
   background: linear-gradient(to bottom, #ECF0F1, #F8F9FA);
+  height: auto !important;
+  min-height: unset !important;
+
 }
 
 .loading-container {
@@ -204,7 +206,9 @@ onMounted(() => {
   .film-single-view {
     padding: 0;
   }
+
 }
+
 
 
 

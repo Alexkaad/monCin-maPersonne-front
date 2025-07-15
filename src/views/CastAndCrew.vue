@@ -84,6 +84,24 @@ const groupedEffectVisuels = computed(() => {
   return Array.from(grouped.values());
 });
 
+const groupedCamera = computed(() => {
+  const grouped = new Map();
+
+  camera.value.forEach((crew: Crew) => {
+    if (!grouped.has(crew.id)) {
+      grouped.set(crew.id, {
+        ...crew,
+        jobs: [crew.job]
+      });
+    } else {
+      grouped.get(crew.id).jobs.push(crew.job);
+    }
+  });
+
+  return Array.from(grouped.values());
+});
+
+
 
 const groupedWriting = computed(() => {
   const grouped = new Map();
@@ -271,7 +289,7 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-camera-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in camera" :key="crew.id">
+                <div class="card mt-2" v-for="crew in groupedCamera" :key="crew.id">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -590,13 +608,20 @@ onMounted(()=>{
   display: grid;
 }
 
+
 .card {
   width: 7rem;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   height: 310px; /* Ajustez selon vos besoins */
+  cursor: pointer;
 
+}
+
+.card:hover {
+  transform: scale(1.05);
+  transition: all 0.3s ease;
 }
 
 .jobs-container {

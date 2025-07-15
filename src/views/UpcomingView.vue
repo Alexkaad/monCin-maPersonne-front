@@ -10,7 +10,7 @@ const films = ref<any[]>([]);
 const loading = ref<boolean>(false);
 const total_pages = ref<number>(0);
 const current_pages = ref<number>(1);
-const filteredResults = ref<any[]>([]);
+
 
 
 const loadMovies = async (page = 1) => {

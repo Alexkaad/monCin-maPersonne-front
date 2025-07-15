@@ -32,8 +32,8 @@ const mainCast= computed (() => {
 
 <template>
   <div class="carrousel-main-actors mt-1 d-flex flex-column align-items-center ">
-    <div class="container title-of-mainActor ">
-      <h5 class=" title-actor ">Têtes d'affiche</h5>
+    <div class="container title-of-mainActor">
+      <h5 class=" title-actor fw-bolder ">Têtes d'affiche</h5>
     </div>
 
 
@@ -122,12 +122,13 @@ const mainCast= computed (() => {
 }
 
 .img-container {
-  height: 150px !important;   /* Réduit la hauteur de l'image */
+  height: 180px !important;   /* Réduit la hauteur de l'image */
   width: 100% !important;
 }
 
 .card-body {
   padding: 0.25rem !important; /* Réduit le padding du corps de la card */
+  background-color: #deb887 !important;
 }
 
 
@@ -148,6 +149,8 @@ const mainCast= computed (() => {
 .title-of-mainActor {
   display: flex;
   justify-content: start;
+  padding:0;
+  margin-bottom: 15px;
 
 
 }
@@ -183,8 +186,8 @@ const mainCast= computed (() => {
   }
 
   .card-fixed-size {
-    width: 100px !important;
-    height: 230px !important;
+    width: 110px !important;
+    height: 240px !important;
   }
 
   .img-container {
@@ -208,7 +211,7 @@ const mainCast= computed (() => {
     word-wrap: break-word;
     line-height: 1.2;
     margin-top: 20px;
-    font-size: 0.90rem;
+    font-size: 1.5rem;
 
   }
 
@@ -247,8 +250,8 @@ const mainCast= computed (() => {
     padding-top: 5px;
   }
   .card-fixed-size {
-    width: 75px !important;
-    height: 180px !important;
+    width: 72px !important;
+    height: 160px !important;
   }
 
   .img-container {

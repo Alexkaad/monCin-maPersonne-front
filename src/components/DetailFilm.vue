@@ -178,7 +178,7 @@ const formatRuntime = (runtime: string | number) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.70rem;
+  font-size: 0.80rem;
 }
 
 .genres {

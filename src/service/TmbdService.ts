@@ -89,6 +89,19 @@ export const movieService = {
             console.error('Erreur:', error.response?.data || error);
             throw error; // Il faut propager l'erreur
         }
+    },
+
+    async getRecommendationMovie (id: number) {
+
+        try {
+            const response = await apiClient.get(`/films/${id}/recommendations`);
+            console.log('Reponse recommendation:', response.data);
+            return response.data;
+        }catch (error: any) {
+
+            console.error('Erreur:', error.response?.data || error);
+            throw error;
+        }
     }
 
 

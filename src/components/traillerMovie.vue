@@ -60,8 +60,8 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
     </div>
 
     <!-- Liste des trailers disponibles -->
-    <div class="trailers-list">
-      <h3>Vidéos disponibles</h3>
+    <div class="trailers-list container">
+      <h5 class="d-flex align-items-start fw-bold">Vidéos disponibles</h5>
       <div class="trailers-scroll">
         <div class="row flex-nowrap">
           <div v-for="trailer in props.trailers"
@@ -89,6 +89,7 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
       </div>
     </div>
   </div>
+
 </template>
 
 <style scoped>

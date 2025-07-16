@@ -1,12 +1,14 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {movieService} from "@/service/TmbdService";
 import {useRoute} from "vue-router";
 import DetailFilm from "@/components/DetailFilm.vue";
 import MainActors from "@/components/MainActors.vue";
 import TraillerMovie from "@/components/traillerMovie.vue";
 import {SortedTrailers, Trailer} from "@/entities/Trailer";
+import CardFilm from "@/components/CardFilm.vue";
+import CardRecommendation from "@/components/CardRecommendation.vue";
 
 
 
@@ -14,8 +16,6 @@ import {SortedTrailers, Trailer} from "@/entities/Trailer";
 
 const film = ref<any>({});
 const cast = ref<any[]>([]);
-const trailers = ref<any[]>([]);
-const mainTrailer = ref<Trailer | undefined>(undefined);
 const sortedTrailer = ref<SortedTrailers>({
   mainTrailer: undefined,
   otherVideos: []
@@ -27,7 +27,29 @@ const loading = ref<boolean>(false);
 const loadingCast = ref(false)
 const loadingTrailer = ref(false)
 const route = useRoute();
+const loadingRecommendation = ref<boolean>(false);
+const recommendations = ref<any[]>([]);
 
+watch(
+    () => route.params.id,
+    async (newId) => {
+      if (newId) {
+        // Réinitialiser les états
+        loading.value = true;
+        loadingCast.value = true;
+        loadingTrailer.value = true;
+        loadingRecommendation.value = true;
+
+        // Recharger toutes les données
+        await Promise.all([
+          LoadFilmSingle(),
+          fetchCreditMovie(),
+          fetchTrailers(),
+          fetchRecommendation()
+        ]);
+      }
+    }
+);
 
 
 
@@ -205,15 +227,41 @@ function findMainTrailer(videos: Trailer[]): Trailer | undefined {
   });
 }
 
+const fetchRecommendation = async (): Promise<void> => {
+  const movieId = Number(route.params.id);
 
+  if (!movieId) {
+    console.error("Id du film non trouvé afin d'afficher les recommandations");
+    return;
+  }
 
+  try {
+    loadingRecommendation.value = true;
+    const response = await movieService.getRecommendationMovie(movieId);
+    recommendations.value = response.results.map((film: {
+      title: string;
+      poster_path: string;
+      id: number;
+    }) => ({
+      title: film.title,
+      poster_path: film.poster_path,
+      id: film.id,
+    }));
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  } finally {
+    loadingRecommendation.value = false;
+  }
+};
 
 onMounted(() => {
 
   LoadFilmSingle();
   fetchCreditMovie();
   fetchTrailers();
-
+  fetchRecommendation()
 
 })
 </script>
@@ -258,10 +306,15 @@ onMounted(() => {
         :trailers="sortedTrailer.otherVideos"
         :film-id="Number(route.params.id)"
     />
-    <div v-else class="alert alert-info">
-      Aucune bande-annonce disponible pour ce film.
+    <div v-if="loadingRecommendation" class="loading-container">
+      <div class="spinner"></div>
+      <p>Chargement du Recommendations..</p>
     </div>
 
+    <CardRecommendation
+        v-else-if="recommendations.length > 0"
+        :recommendations="recommendations"
+    />
 
   </div>
 
@@ -303,8 +356,6 @@ onMounted(() => {
   justify-content: center;
   padding: 2rem;
 }
-
-
 
 @keyframes spin {
   0% { transform: rotate(0deg); }

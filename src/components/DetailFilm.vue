@@ -100,13 +100,14 @@ const openTrailerModal = (trailer: Trailer) => {
                 </span>
               </div>
               <div class="bande-annonce p-2">
-                <button class = "official-trailer btn btn-warning"
+                <button class = "official-trailer btn btn-warning text-black"
                         v-if="sortedTrailer.mainTrailer"
                         @click="openTrailerModal(sortedTrailer.mainTrailer)"
                         style=" border-radius: 20px;
                         font-weight: lighter;
                         padding: 0.1rem 0.30rem;
                         font-size: 0.70rem;
+
 "
                 >
                   Voir la bande-annonce

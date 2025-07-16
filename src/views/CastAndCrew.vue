@@ -5,6 +5,7 @@ import {useRoute} from "vue-router";
 import {movieService} from "@/service/TmbdService";
 import {Crew} from "@/entities/Crew";
 import {Cast} from "@/entities/Cast";
+import BaniereComponent from "@/components/BaniereComponent.vue";
 
 
 
@@ -27,6 +28,9 @@ const actorRoles = ref<any[]>([]);
 const loadingCastCrew = ref<boolean>(false);
 const longerActorRoles = ref<number>(0);
 const imageLoaded = ref(false);
+const film = ref<any>({});
+const bannerLoading = ref(true); // Nouveau ref pour le chargement de la bannière
+
 
 
 const handleImageLoad = () => {
@@ -182,22 +186,58 @@ const loadCastCrew = async () => {
   }
 }
 
+const loadMovieDetails = async () => {
+  const movieId = Number(route.params.id);
+
+  if (!movieId) {
+    console.error("ID du film non trouvé");
+    return;
+  }
+
+  try {
+    bannerLoading.value = true; // Début du chargement
+    const response = await movieService.getMovieById(movieId);
+    film.value = {
+      release_date: new Date(response.release_date).toLocaleDateString('fr-FR', {
+        year: 'numeric'
+      }),
+      title: response.title,
+      poster_path: response.poster_path,
+    };
+  } catch (error) {
+    console.error("Erreur lors du chargement des détails du film:", error);
+  } finally {
+    bannerLoading.value = false; // Fin du chargement
+  }
+};
+
+
+
 onMounted(()=>{
 
   loadCastCrew();
+  loadMovieDetails();
 });
 
 </script>
 
 <template>
 
-  <div class="container-fluid cast-crew-view p-5  bg-body-secondary">
-    <div v-if="loadingCastCrew" class="loading-container">
-      Chargement...
+  <div class="container-fluid cast-crew-view bg-body-secondary" style="margin-top: 100px">
+    <div v-if="bannerLoading" class="loading-container">
+      <div class="banner-placeholder"></div>
     </div>
-
     <div v-else>
-      <div class="d-flex flex-column align-content-center  p-5">
+      <div class="content-wrapper">
+        <div v-if="loadingCastCrew || !film.title" class="loading-container">
+          Chargement...
+        </div>
+        <BaniereComponent
+            :poster-url="'https://image.tmdb.org/t/p/w500' + film.poster_path"
+            :title="film.title"
+            :release-date="film.release_date"
+        />
+
         <div class="d-flex justify-content-center">
           <div class="section-content ">
             <div class="section-title-longerActorRoles">
@@ -669,6 +709,15 @@ onMounted(()=>{
 .card-body {
   background-color: burlywood;
 }
+.banner-placeholder {
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to right, #2c3e50, #3498db);
+  opacity: 0.3;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
 
 .loading-container {
   text-align: center;

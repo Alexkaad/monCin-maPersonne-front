@@ -9,6 +9,10 @@ const props = defineProps<{
   release_date: string
 }>();
 
+
+
+
+
 const imageLoaded = ref(false);
 
 const handleImageLoad = () => {

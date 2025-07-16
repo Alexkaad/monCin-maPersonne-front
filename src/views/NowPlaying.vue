@@ -82,6 +82,7 @@ onMounted(() => {
                   :title="film.title"
                   :poster_path="'https://image.tmdb.org/t/p/w500' +film.poster_path"
                   :release_date="film.release_date"
+                  :id="film.id"
               />
             </div>
           </div>

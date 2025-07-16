@@ -1,6 +1,10 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
+import OfficielTrailer from "@/components/officielTrailer.vue";
+import {SortedTrailers, Trailer} from "@/entities/Trailer";
+import {useRoute} from "vue-router";
+
 
 defineProps<{
 
@@ -13,10 +17,13 @@ defineProps<{
   movieBackdrop: string,
   movieTagline: string,
   movieSpokenLanguages: string,
+  sortedTrailer: SortedTrailers
 
 }>();
 
 const posterLoad = ref(false)
+const officielTrailerRef = ref<InstanceType<typeof OfficielTrailer> | null>(null);
+const route = useRoute();
 
 
 const handlePosterLoad = () => {
@@ -40,6 +47,11 @@ const formatRuntime = (runtime: string | number) => {
   return `${hours}h ${remainingMinutes}min`;
 };
 
+const openTrailerModal = (trailer: Trailer) => {
+  if (officielTrailerRef.value) {
+    officielTrailerRef.value.openModal(trailer.key);
+  }
+};
 </script>
 
 <template>
@@ -65,7 +77,6 @@ const formatRuntime = (runtime: string | number) => {
             <div class="film-info">
               <h6 class="film-title text-start">{{ movieTitle }}</h6>
               <div class="tagline text-start">{{ movieTagline }}</div>
-
               <div class="meta-info">
                 <div class="info-item">
                   <i class="bi bi-calendar"></i>
@@ -80,13 +91,32 @@ const formatRuntime = (runtime: string | number) => {
                   <span>{{ movieSpokenLanguages }}</span>
                 </div>
               </div>
-
+              <div class="genre-bande d-flex ">
               <div class="genres">
                 <span v-for="genre in movieGenres"
                       :key="genre.id"
                       class="genre-tag bg-primary text-white">
                   {{ genre.name }}
                 </span>
+              </div>
+              <div class="bande-annonce p-2">
+                <button class = "official-trailer btn btn-warning"
+                        v-if="sortedTrailer.mainTrailer"
+                        @click="openTrailerModal(sortedTrailer.mainTrailer)"
+                        style=" border-radius: 20px;
+                        font-weight: lighter;
+                        padding: 0.1rem 0.30rem;
+                        font-size: 0.70rem;
+"
+                >
+                  Voir la bande-annonce
+                </button>
+                <OfficielTrailer
+                    ref="officielTrailerRef"
+                    :trailer="sortedTrailer.mainTrailer"
+                    :film-id="Number(route.params.id)"
+                />
+              </div>
               </div>
 
               <div class="synopsis text-start">
@@ -194,7 +224,7 @@ const formatRuntime = (runtime: string | number) => {
   padding: 0.5rem 1rem;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  font-size: 1rem;
+  font-size: 0.90rem;
 }
 
 .synopsis {
@@ -239,6 +269,15 @@ const formatRuntime = (runtime: string | number) => {
     font-family: 'Roboto', sans-serif;
 
 
+  }
+
+  .genre-bande{
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.20rem;
   }
 
   .content-wrapper {
@@ -388,7 +427,7 @@ const formatRuntime = (runtime: string | number) => {
   }
 
   .genres {
-    margin-bottom: 0.60rem!important;
+    margin-bottom: 0.40rem!important;
   }
   .info-item {
     display: flex;
@@ -407,7 +446,7 @@ const formatRuntime = (runtime: string | number) => {
   }
 
   .synopsis {
-    margin-top: 0.60rem!important;
+    margin-top: 0.40rem!important;
     padding: 0 5px!important;
   }
 
@@ -438,12 +477,4 @@ const formatRuntime = (runtime: string | number) => {
     padding: 0;
   }
 }
-
-
-
-
-
-
-
-
 </style>

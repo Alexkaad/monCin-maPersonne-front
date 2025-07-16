@@ -5,14 +5,31 @@ import {movieService} from "@/service/TmbdService";
 import {useRoute} from "vue-router";
 import DetailFilm from "@/components/DetailFilm.vue";
 import MainActors from "@/components/MainActors.vue";
+import TraillerMovie from "@/components/traillerMovie.vue";
+import {SortedTrailers, Trailer} from "@/entities/Trailer";
+
+
+
+
 
 const film = ref<any>({});
 const cast = ref<any[]>([]);
+const trailers = ref<any[]>([]);
+const mainTrailer = ref<Trailer | undefined>(undefined);
+const sortedTrailer = ref<SortedTrailers>({
+  mainTrailer: undefined,
+  otherVideos: []
+});
+
+
 
 const loading = ref<boolean>(false);
 const loadingCast = ref(false)
-
+const loadingTrailer = ref(false)
 const route = useRoute();
+
+
+
 
 const LoadFilmSingle = async () => {
 
@@ -114,10 +131,90 @@ const fetchCreditMovie = async () => {
   }
 }
 
+const fetchTrailers = async () => {
+  const movieId = Number(route.params.id);
+  if (!movieId) {
+    console.error('Id du film non trouvé afin d\'afficher les trailers');
+    return;
+  }
+
+  try {
+    loadingTrailer.value = true;
+    const response = await movieService.getTrailer(movieId);
+
+    if (!response || !response.results || response.results.length === 0) {
+      console.error('Données de trailers invalides ou vides');
+      sortedTrailer.value = { mainTrailer: undefined, otherVideos: [] };
+      return;
+    }
+
+    // Classer les vidéos par ordre de priorité
+    const videos = response.results.sort((a: Trailer, b: Trailer) => {
+      // Trier par date de publication (plus récent en premier)
+      return new Date(b.published_at).getTime() - new Date(a.published_at).getTime();
+    });
+
+    // Trouver la bande-annonce principale
+    let mainTrailer = findMainTrailer(videos);
+
+    // Si aucune bande-annonce principale n'est trouvée, prendre la première vidéo
+    if (!mainTrailer && videos.length > 0) {
+      mainTrailer = videos[0];
+    }
+
+    // Toutes les autres vidéos (exclure la bande-annonce principale si elle existe)
+    const otherVideos = videos.filter((video: Trailer) => video.id !== mainTrailer?.id);
+
+    console.log('Nombre total de vidéos:', videos.length);
+    console.log('Main Trailer:', mainTrailer);
+    console.log('Other Videos:', otherVideos);
+
+    sortedTrailer.value = {
+      mainTrailer,
+      otherVideos
+    };
+
+  } catch (error) {
+    console.error('Erreur lors de la récupération des trailers:', error);
+    sortedTrailer.value = { mainTrailer: undefined, otherVideos: [] };
+  } finally {
+    loadingTrailer.value = false;
+  }
+};
+
+// Fonction améliorée pour trouver la bande-annonce principale
+function findMainTrailer(videos: Trailer[]): Trailer | undefined {
+  // Essayer différentes stratégies pour trouver la bande-annonce principale
+  return videos.find((video: Trailer) => {
+    const name = video.name.toLowerCase();
+    const isOfficial = video.official;
+    const isFrench = video.iso_639_1 === 'en';
+    const isTrailer = video.type === 'Trailer';
+
+    // Vérifier différentes conditions possibles
+    return (
+        // Condition 1: Bande-annonce officielle en français
+        (isTrailer && isOfficial && isFrench) ||
+        // Condition 2: Contient "bande-annonce" dans le nom
+        (isTrailer && name.includes('bande-annonce')) ||
+        // Condition 3: Contient "trailer" dans le nom
+        (isTrailer && name.includes('trailer')) ||
+        // Condition 4: Est une vidéo officielle en français
+        (isOfficial && isFrench)
+    );
+  });
+}
+
+
+
+
 onMounted(() => {
 
   LoadFilmSingle();
   fetchCreditMovie();
+  fetchTrailers();
+
+
 })
 </script>
 
@@ -140,6 +237,7 @@ onMounted(() => {
           :movie-backdrop="film.backdrop_path || ''"
           :movie-tagline="film.tagline || ''"
           :movie-spoken-languages="film.languages || ''"
+          :sorted-trailer="sortedTrailer"
       />
     </div>
 
@@ -151,9 +249,20 @@ onMounted(() => {
         v-else-if="cast.length > 0"
         :cast="cast"
     />
-    <div v-else class="alert alert-info">
-      Aucun acteur disponible pour ce film.
+    <div v-if="loadingTrailer" class="loading-container">
+      <div class="spinner"></div>
+      <p>Chargement des bandes-annonces...</p>
     </div>
+    <TraillerMovie
+        v-else-if="sortedTrailer.otherVideos.length > 0"
+        :trailers="sortedTrailer.otherVideos"
+        :film-id="Number(route.params.id)"
+    />
+    <div v-else class="alert alert-info">
+      Aucune bande-annonce disponible pour ce film.
+    </div>
+
+
   </div>
 
 </template>
@@ -208,8 +317,5 @@ onMounted(() => {
   }
 
 }
-
-
-
 
 </style>

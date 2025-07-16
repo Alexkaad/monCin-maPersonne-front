@@ -105,19 +105,19 @@ const mainCast= computed (() => {
 }
 .main-actors-style-1 {
   display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
-  gap: 5px !important;        /* Réduit l'espace entre les cards */
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 5px !important;
   padding: 0 !important;
   margin: 0 !important;
   width: 100% !important;
 }
 
 .card-fixed-size {
-  width: 120px !important;    /* Largeur fixe plus petite */
-  height: 250px !important;   /* Hauteur réduite */
-  margin: 0 !important;       /* Supprime toutes les marges */
+  width: 120px !important;
+  height: 250px !important;
+  margin: 0 !important;
   padding: 0 !important;
-  border: none !important;    /* Supprime les bordures si nécessaire */
+  border: none !important;
   box-sizing: border-box !important;
 }
 

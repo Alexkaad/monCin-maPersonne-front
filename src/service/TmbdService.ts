@@ -78,5 +78,19 @@ export const movieService = {
             console.error('Erreur:', error.response.data || error);
             throw error;
         }
+    },
+
+    async getTrailer(id: number) {
+        try {
+            const response = await apiClient.get(`/films/${id}/videos`);
+            console.log("Response data:", response.data); // Pour déboguer
+            return response.data;
+        } catch (error: any) {
+            console.error('Erreur:', error.response?.data || error);
+            throw error; // Il faut propager l'erreur
+        }
     }
+
+
+
 }

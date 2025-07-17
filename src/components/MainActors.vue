@@ -31,7 +31,7 @@ const mainCast= computed (() => {
 </script>
 
 <template>
-  <div class="carrousel-main-actors mt-1 d-flex flex-column align-items-center ">
+  <div class="carrousel-main-actors mt-1 d-flex flex-column align-items-center p-4 ">
     <div class="container title-of-mainActor">
       <h5 class=" title-actor fw-bolder ">Têtes d'affiche</h5>
     </div>
@@ -62,15 +62,12 @@ const mainCast= computed (() => {
       </div>
 
     <div class="container show-list mt-5 ">
-      <div class="lien-wrapper d-flex justify-content-start p-2" style="width: 100%;">
+      <div class="lien-wrapper d-flex justify-content-start p-1" style="width: 100%;">
       <span class="fw-bold lien-cliclable " @click="$router.push({name: 'Cast&Crew'})">
         Voir la liste complete des distributions des rôles et equipe technique
       </span>
-
       </div>
-      <hr>
     </div>
-
   </div>
 
 
@@ -114,7 +111,7 @@ const mainCast= computed (() => {
 
 .card-fixed-size {
   width: 120px !important;
-  height: 250px !important;
+  height: 230px !important;
   margin: 0 !important;
   padding: 0 !important;
   border: none !important;
@@ -122,7 +119,7 @@ const mainCast= computed (() => {
 }
 
 .img-container {
-  height: 180px !important;   /* Réduit la hauteur de l'image */
+  height: 170px !important;   /* Réduit la hauteur de l'image */
   width: 100% !important;
 }
 
@@ -141,7 +138,7 @@ const mainCast= computed (() => {
 }
 
 .carrousel-main-actors {
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 
@@ -151,8 +148,6 @@ const mainCast= computed (() => {
   justify-content: start;
   padding:0;
   margin-bottom: 15px;
-
-
 }
 
 .skeleton-loader {

@@ -5,9 +5,15 @@ const apiClient = axios.create({
     baseURL: process.env.VUE_APP_API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
     }
 })
+
+
+
 
 export const movieService = {
     async getUpcomingMovies(page = 1) {
@@ -53,18 +59,31 @@ export const movieService = {
     },
 
     async getMovieById(id: number) {
-
         try {
-            const response = await apiClient.get(`/films/${id}`,
-                {
-                    params: {id}
-                });
+            const response = await apiClient.get(`/films/${id}`);
+
+            if (!response || !response.data) {
+                throw new Error('Réponse invalide du serveur');
+            }
+
             return response.data;
         } catch (error: any) {
-            console.error('Erreur:', error.response.data || error);
+            // Log plus détaillé de l'erreur
+            if (error.response) {
+                console.error('Erreur de réponse:', {
+                    status: error.response.status,
+                    data: error.response.data,
+                    headers: error.response.headers
+                });
+            } else if (error.request) {
+                console.error('Erreur de requête:', error.request);
+            } else {
+                console.error('Erreur:', error.message);
+            }
             throw error;
         }
     },
+
 
     async getCreditMovie(id: number) {
 

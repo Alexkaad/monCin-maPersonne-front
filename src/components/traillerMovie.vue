@@ -40,7 +40,9 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
 </script>
 
 <template>
+
   <div class="container trailers-section">
+    <hr>
     <h5 class="title-trailer text-center fw-bold text-warning">
       Teasers et Making-of
     </h5>

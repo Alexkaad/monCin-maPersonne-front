@@ -4,11 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import router from './router'
+import {createPinia} from "pinia";
 
 
 
 
 const app = createApp(App)
+const pinia = createPinia()
     app.use(router)
 
 if (process.env.NODE_ENV === 'development') {
@@ -20,4 +22,5 @@ if (process.env.NODE_ENV === 'development') {
         app
     })
 }
+app.use(pinia)
 app.mount('#app')

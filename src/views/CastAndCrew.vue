@@ -9,6 +9,7 @@ import BaniereComponent from "@/components/BaniereComponent.vue";
 
 
 
+
 const route = useRoute();
 
 const technicalTeams = ref<any[]>([]);
@@ -29,13 +30,36 @@ const loadingCastCrew = ref<boolean>(false);
 const longerActorRoles = ref<number>(0);
 const imageLoaded = ref(false);
 const film = ref<any>({});
-const bannerLoading = ref(true); // Nouveau ref pour le chargement de la bannière
 
 
 
 const handleImageLoad = () => {
-  imageLoaded.value = true;
+  imageLoaded.value = true
+}
+
+const loadMovieDetails = async () => {
+  const movieId = Number(route.params.id);
+
+  if (!movieId) {
+    console.error("ID du film non trouvé");
+    return;
+  }
+
+  try {
+    const response = await movieService.getMovieById(movieId);
+
+    film.value = {
+      release_date: new Date(response.release_date).toLocaleDateString('fr-FR', {
+        year: 'numeric'
+      }),
+      title: response.title,
+      poster_path: response.poster_path,
+    };
+  } catch (error) {
+    console.error("Erreur lors du chargement des détails du film:", error);
+  }
 };
+
 
 const groupedCostumeMakeUp = computed(() => {
   const grouped = new Map();
@@ -186,58 +210,32 @@ const loadCastCrew = async () => {
   }
 }
 
-const loadMovieDetails = async () => {
-  const movieId = Number(route.params.id);
-
-  if (!movieId) {
-    console.error("ID du film non trouvé");
-    return;
-  }
-
-  try {
-    bannerLoading.value = true; // Début du chargement
-    const response = await movieService.getMovieById(movieId);
-    film.value = {
-      release_date: new Date(response.release_date).toLocaleDateString('fr-FR', {
-        year: 'numeric'
-      }),
-      title: response.title,
-      poster_path: response.poster_path,
-    };
-  } catch (error) {
-    console.error("Erreur lors du chargement des détails du film:", error);
-  } finally {
-    bannerLoading.value = false; // Fin du chargement
-  }
-};
-
 
 
 onMounted(()=>{
 
-  loadCastCrew();
   loadMovieDetails();
+  loadCastCrew();
+
+
 });
 
 </script>
 
 <template>
 
-  <div class="container-fluid cast-crew-view bg-body-secondary" style="margin-top: 100px">
-    <div v-if="bannerLoading" class="loading-container">
-      <div class="banner-placeholder"></div>
-    </div>
-    <div v-else>
-      <div class="content-wrapper">
-        <div v-if="loadingCastCrew || !film.title" class="loading-container">
-          Chargement...
-        </div>
+  <div class="container-fluid cast-crew-view bg-body-secondary" style="margin-top: 72px">
+    <div class="content-wrapper">
+      <div v-if="loadingCastCrew || !film.title" class="loading-container">
+        <div class="banner-placeholder"></div>
+        Chargement...
+      </div>
+      <div v-else>
         <BaniereComponent
             :poster-url="'https://image.tmdb.org/t/p/w500' + film.poster_path"
             :title="film.title"
             :release-date="film.release_date"
         />
-
         <div class="d-flex justify-content-center">
           <div class="section-content ">
             <div class="section-title-longerActorRoles">
@@ -298,21 +296,21 @@ onMounted(()=>{
                 Artistique
               </h6>
             </div>
-            <div class = "collapse collapse-vertical" id="collapse-art-section">
-            <div class="card-container ">
-              <div class="card " v-for="crew in art" :key="crew.id">
-                <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
-                     @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
-                     @load="handleImageLoad"
-                     class="card-img-top"
-                     alt="titre-image"
-                >
-                <div class="card-body">
-                  <p class="card-text fw-bolder small mb-0">{{ crew.name }}</p>
-                  <span class="cart-post small mt-1">{{ crew.job }}</span>
+            <div class="collapse collapse-vertical" id="collapse-art-section">
+              <div class="card-container ">
+                <div class="card " v-for="crew in art" :key="crew.id">
+                  <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
+                       @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
+                       @load="handleImageLoad"
+                       class="card-img-top"
+                       alt="titre-image"
+                  >
+                  <div class="card-body">
+                    <p class="card-text fw-bolder small mb-0">{{ crew.name }}</p>
+                    <span class="cart-post small mt-1">{{ crew.job }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
             </div>
             <div class="bgf d-flex ">
               <h6
@@ -445,25 +443,25 @@ onMounted(()=>{
                   class="card-title fw-bold p-2 text-black"
                   style="font-family:'MS PGothic',sans-serif"
               >
-               Montage
+                Montage
               </h6>
             </div>
             <div class="collapse collapse-vertical" id="collapse-editing-section">
               <div class="card-container ">
-              <div class="card mt-2" v-for="crew in editing" :key="crew.id">
-                <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
-                     @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
-                     @load="handleImageLoad"
-                     class="card-img-top"
-                     alt="titre-image"
-                >
-                <div class="card-body p-2">
-                  <p class="card-text fw-bolder small mb-0">{{ crew.name }}</p>
-                  <span class="cart-post small mt-1">{{ crew.job }}</span>
+                <div class="card mt-2" v-for="crew in editing" :key="crew.id">
+                  <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
+                       @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
+                       @load="handleImageLoad"
+                       class="card-img-top"
+                       alt="titre-image"
+                  >
+                  <div class="card-body p-2">
+                    <p class="card-text fw-bolder small mb-0">{{ crew.name }}</p>
+                    <span class="cart-post small mt-1">{{ crew.job }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
             <div class="bgf d-flex align-items-start">
               <h6
                   v-if="light.length > 0"
@@ -503,7 +501,7 @@ onMounted(()=>{
                   class="card-title fw-bold p-2 text-black"
                   style="font-family:'MS PGothic',sans-serif"
               >
-              Production
+                Production
               </h6>
             </div>
             <div class="collapse collapse-vertical" id="collapse-production-section">
@@ -630,8 +628,6 @@ onMounted(()=>{
       </div>
     </div>
   </div>
-
-
 </template>
 
 <style scoped>

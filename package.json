@@ -14,6 +14,7 @@
     "bootstrap-icons": "^1.13.1",
     "colorthief": "^2.6.0",
     "core-js": "^3.44.0",
+    "pinia": "^3.0.3",
     "vue": "^3.5.17",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.5.1"

@@ -7,7 +7,6 @@ import DetailFilm from "@/components/DetailFilm.vue";
 import MainActors from "@/components/MainActors.vue";
 import TraillerMovie from "@/components/traillerMovie.vue";
 import {SortedTrailers, Trailer} from "@/entities/Trailer";
-import CardFilm from "@/components/CardFilm.vue";
 import CardRecommendation from "@/components/CardRecommendation.vue";
 
 

@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, watch, onMounted} from 'vue';
+import {ref, computed,} from 'vue';
 import {useColorStore} from "@/store/ColorStore";
 
 
@@ -12,57 +12,30 @@ const props = defineProps({
 const isImageLoaded = ref(false);
 const colorStore = useColorStore();
 
+
+
 const bannerStyle = computed(() => ({
   background: `linear-gradient(to right, ${colorStore.dominantColorRGB}, rgba(0, 0, 0, 0.4))`,
   borderBottom: `1px solid ${colorStore.dominantColorRGB}`,
   opacity: isImageLoaded.value ? 1 : 0.6,
-  transition: 'all 0.5s ease-in'
+
 }));
 
-// Fonction pour extraire la couleur
-const extractColor = async () => {
-  isImageLoaded.value = false;
-
-  const fullImageUrl = `https://image.tmdb.org/t/p/w500${props.posterUrl}`;
-
-  try {
-    await colorStore.extractDominantColor(fullImageUrl);
-  } catch (error) {
-    console.error("Erreur lors de l'extraction de la couleur:", error);
-  } finally {
-    isImageLoaded.value = true;
-  }
-};
-
-onMounted(() => {
-  // On ne bloque pas l’affichage
-  extractColor();
-});
-
-
-// Watcher pour détecter les changements d'URL
-watch(() => props.posterUrl, async (newUrl) => {
-  if (newUrl) {
-    await extractColor();
-  }
-}, { immediate: true });
-
-// Pas besoin de onMounted car le watch avec immediate fait le travail
 </script>
 
 <template>
-  <div class="banner" :style="bannerStyle">
-    <div class="banner-content">
+  <div class="banner " :style="bannerStyle">
+    <div class="banner-content d-flex justify-content-center align-items-center ">
       <div class="poster-container">
         <img
-            :src="'https://image.tmdb.org/t/p/w500' + posterUrl"
+            :src="'https://image.tmdb.org/t/p/w500' + props.posterUrl"
             :alt="title"
             class="poster-image"
             crossorigin="anonymous"
-            @load="extractColor"
+            @load="isImageLoaded = true"
         />
       </div>
-      <div class="title-container d-flex justify-content-center p-2">
+      <div class="title-container d-flex p-2">
         <h2 class="p-1">{{ title }}</h2>
         <h2 class="p-1">({{ releaseDate }})</h2>
       </div>

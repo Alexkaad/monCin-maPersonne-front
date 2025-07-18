@@ -31,7 +31,7 @@ const mainCast= computed (() => {
 </script>
 
 <template>
-  <div class="carrousel-main-actors mt-1 d-flex flex-column align-items-center p-4 ">
+  <div class="carrousel-main-actors mt-1 d-flex flex-column align-items-center" style="height: auto">
     <div class="container title-of-mainActor">
       <h5 class=" title-actor fw-bolder ">Têtes d'affiche</h5>
     </div>
@@ -61,7 +61,7 @@ const mainCast= computed (() => {
         </div>
       </div>
 
-    <div class="container show-list mt-5 ">
+    <div class="container show-list mt-4 ">
       <div class="lien-wrapper d-flex justify-content-start p-1" style="width: 100%;">
       <span class="fw-bold lien-cliclable " @click="$router.push({name: 'Cast&Crew'})">
         Voir la liste complete des distributions des rôles et equipe technique
@@ -102,8 +102,8 @@ const mainCast= computed (() => {
 }
 .main-actors-style-1 {
   display: grid !important;
-  grid-template-columns: repeat(6, 1fr) !important;
-  gap: 5px !important;
+  grid-template-columns: repeat(8, 1fr) !important;
+  gap: 10px 1px!important;
   padding: 0 !important;
   margin: 0 !important;
   width: 100% !important;

@@ -210,15 +210,12 @@ const loadCastCrew = async () => {
   }
 }
 
-
-
 onMounted(()=>{
-
   loadMovieDetails();
   loadCastCrew();
 
-
 });
+
 
 </script>
 

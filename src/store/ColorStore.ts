@@ -7,7 +7,7 @@ import ColorThief from 'colorthief'
 
 export const useColorStore = defineStore('color', {
     state: () => ({
-        dominantColorRGB: 'rgb(0, 0, 0)',
+        dominantColorRGB: 'rgb(32, 40, 49)',
     }),
 
     actions: {

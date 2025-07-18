@@ -11,6 +11,7 @@ const props = defineProps<{
 
 // Typage correct des refs
 const selected = ref<Trailer | null>(null);
+const iframeRef = ref<HTMLIFrameElement | null>(null);
 
 
 // Méthode pour sélectionner un trailer
@@ -33,39 +34,42 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
   if (newTrailers?.length > 0) {
     // Sélectionner la première vidéo de la liste sans filtrage supplémentaire
     selected.value = newTrailers[0];
+    console.log('selected.value', selected.value);
   } else {
     selected.value = null;
   }
 }, {immediate: true});
+
+
+
+
 </script>
 
 <template>
-
   <div class="container trailers-section">
     <hr>
-    <h5 class="title-trailer text-center fw-bold text-warning">
+    <h5  class="title-trailer text-center fw-bold text-warning">
       Teasers et Making-of
     </h5>
     <!-- Lecteur vidéo principal -->
-    <div v-if="selected" class="main-video mb-4">
+    <div v-if="selected" class="main-video mb-4 align-items-start">
       <div class="video-container">
         <iframe
+            ref="iframeRef"
             :src="`https://www.youtube.com/embed/${selected.key}`"
             :title="selected.name"
-            width="70%"
+            width="65%"
             height="440"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
-        ></iframe>
-      </div>
-    </div>
 
+        ></iframe>
     <!-- Liste des trailers disponibles -->
     <div class="trailers-list container">
       <h5 class="d-flex align-items-start fw-bold">Vidéos disponibles</h5>
       <div class="trailers-scroll">
-        <div class="row flex-nowrap">
+        <div class=" wrapper-list row flex-nowrap">
           <div v-for="trailer in props.trailers"
                :key="trailer.id"
                class="col-auto trailer-item"
@@ -91,6 +95,8 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
       </div>
     </div>
   </div>
+  </div>
+  </div>
 
 </template>
 
@@ -109,14 +115,11 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
   height: 8px;
 }
 
-.trailers-scroll::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
+
 
 .trailers-scroll::-webkit-scrollbar-thumb {
   background: #888;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .trailers-scroll::-webkit-scrollbar-thumb:hover {
@@ -130,7 +133,7 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
 }
 
 .trailer-item {
-  width: 300px;
+  width: 250px;
   padding: 0 10px;
   display: inline-block;
   vertical-align: top;
@@ -159,7 +162,7 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
 }
 
 .trailer-title {
-  font-size: 1rem;
+  font-size: 0.70rem;
   margin: 0;
   font-weight: 500;
   line-height: 1.2;
@@ -185,4 +188,8 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
 .trailer-item.active .trailer-content {
   border: 2px solid #007bff;
 }
+
+
+
+
 </style>

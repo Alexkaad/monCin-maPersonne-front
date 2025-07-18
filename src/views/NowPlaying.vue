@@ -68,15 +68,16 @@ onMounted(() => {
 
     <div class="pagination">
       <div class="container-fluid nowPlaying-movies overflow-scrollable">
-        <div class="d-flex justify-content-start  p-5  ">
-          <h3 class="titre-princ ">Films à venir</h3>
+        <div class="d-flex justify-content-center  p-3  ">
+          <h4 class="titre-princ ">Films à venir</h4>
         </div>
         <div v-if="loading" class="loading">
           Chargement...
         </div>
 
-        <div v-else class="container-fluid px-4">
-          <div class="row row-cols-5 g-4">
+        <div v-else class="container-fluid d-flex px-4">
+          <div class="vide" style="width:100%; height: auto"></div>
+          <div class="row row-cols-6 " style="gap: 30px 35px">
             <div class="col" v-for="film in films" :key="film.id">
               <CardFilm
                   :title="film.title"

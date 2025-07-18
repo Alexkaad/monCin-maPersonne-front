@@ -4,9 +4,10 @@ import {ref} from "vue";
 import OfficielTrailer from "@/components/officielTrailer.vue";
 import {SortedTrailers, Trailer} from "@/entities/Trailer";
 import {useRoute} from "vue-router";
+import {useColorStore} from "@/store/ColorStore";
 
 
-defineProps<{
+const props = defineProps<{
 
   movieTitle: string,
   moviePoster: string,
@@ -24,10 +25,12 @@ defineProps<{
 const posterLoad = ref(false)
 const officielTrailerRef = ref<InstanceType<typeof OfficielTrailer> | null>(null);
 const route = useRoute();
-
+const colorStore = useColorStore();
 
 const handlePosterLoad = () => {
   posterLoad.value = true;
+  const imageUrl = `https://image.tmdb.org/t/p/w500${props.moviePoster}`;
+  colorStore.extractDominantColor(imageUrl);
 };
 
 const formatDate = (date: string) => {
@@ -52,6 +55,9 @@ const openTrailerModal = (trailer: Trailer) => {
     officielTrailerRef.value.openModal(trailer.key);
   }
 };
+
+
+
 </script>
 
 <template>
@@ -106,9 +112,7 @@ const openTrailerModal = (trailer: Trailer) => {
                         style=" border-radius: 20px;
                         font-weight: lighter;
                         padding: 0.1rem 0.30rem;
-                        font-size: 0.70rem;
-
-"
+                        font-size: 0.70rem;"
                 >
                   Voir la bande-annonce
                 </button>
@@ -137,7 +141,7 @@ const openTrailerModal = (trailer: Trailer) => {
 .background-wrapper {
   position: relative;
   width: 100%;
-  height: 600px !important ;
+  height: 550px !important ;
   background-size: cover;
   background-position: top center;
   background-attachment: scroll;
@@ -171,7 +175,7 @@ const openTrailerModal = (trailer: Trailer) => {
 }
 
 .film-poster {
-  width: 300px ! important;
+  width: 270px ! important;
   border-radius: 10px;
 
 
@@ -268,6 +272,7 @@ const openTrailerModal = (trailer: Trailer) => {
     font-size: 1rem !important;
     color: #e0e0e0;
     font-family: 'Roboto', sans-serif;
+    overflow: hidden ! important;
 
 
   }

@@ -28,10 +28,6 @@ const navigateToDetail = (filmId: number) => {
     });
   }
 }
-
-
-
-
 </script>
 
 <template>
@@ -40,7 +36,7 @@ const navigateToDetail = (filmId: number) => {
     <h5 class="recommendation-title d-flex" style="align-items: flex-start">Récommendations</h5>
     <div class="recommendations-scroll">
       <div class="recommendations-row">
-        <div v-for="film in recommendations"
+        <div v-for="film in props.recommendations"
              :key="film.id"
              class="recommendation-card">
           <div class="card border-1 border-emphasis card-fixed-size">
@@ -70,7 +66,7 @@ const navigateToDetail = (filmId: number) => {
 
 
 .recommendation-list {
-  margin: 2rem auto;
+  margin: 1rem auto;
   padding: 0 15px;
 }
 

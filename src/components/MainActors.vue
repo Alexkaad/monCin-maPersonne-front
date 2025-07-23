@@ -44,9 +44,9 @@ const mainCast= computed (() => {
             <div v-if="!imageLoaded" class="skeleton-loader"></div>
             <img :src="actor.poster_path || '@/assets/OIP.jpg'"
                  @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
-                 @load="handleImageLoad"
                  class="card-img-top"
                  alt="titre-image"
+                 @load="handleImageLoad"
             >
           </div>
           <div class="card-body d-flex flex-column">

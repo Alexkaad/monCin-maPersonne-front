@@ -5,20 +5,13 @@ import OfficielTrailer from "@/components/officielTrailer.vue";
 import {SortedTrailers, Trailer} from "@/entities/Trailer";
 import {useRoute} from "vue-router";
 import {useColorStore} from "@/store/ColorStore";
+import {Film} from "@/utils/Film";
 
 
 const props = defineProps<{
 
-  movieTitle: string,
-  moviePoster: string,
-  movieReleaseDate: string,
-  movieOverview: string,
-  movieRuntime: number | string,
-  movieGenres:  Array<{ id: number, name: string }>,
-  movieBackdrop: string,
-  movieTagline: string,
-  movieSpokenLanguages: string,
-  sortedTrailer: SortedTrailers
+  film:Film,
+  sortedTrailers: SortedTrailers,
 
 }>();
 
@@ -29,11 +22,11 @@ const colorStore = useColorStore();
 
 const handlePosterLoad = () => {
   posterLoad.value = true;
-  const imageUrl = `https://image.tmdb.org/t/p/w500${props.moviePoster}`;
+  const imageUrl = `https://image.tmdb.org/t/p/w500${props.film.poster_path}`;
   colorStore.extractDominantColor(imageUrl);
 };
 
-const formatDate = (date: string) => {
+const formatDate = (date: Date | string) => {
   return new Date(date).toLocaleDateString('fr-FR')
 }
 
@@ -62,9 +55,9 @@ const openTrailerModal = (trailer: Trailer) => {
 
 <template>
 
-  <div class="background-wrapper "
-       :style="movieBackdrop ? {
-         backgroundImage: `url(https://image.tmdb.org/t/p/original${movieBackdrop})`
+  <div v-if="props.film" class="background-wrapper "
+       :style="props.film.backdrop_path? {
+         backgroundImage: `url(https://image.tmdb.org/t/p/original${props.film.backdrop_path})`
        } : {}" style="margin-top: 70px">
     <div class="overlay"></div>
     <div class="content-wrapper d-flex ">
@@ -72,7 +65,7 @@ const openTrailerModal = (trailer: Trailer) => {
         <div class="row align-items-start">
           <div class="col-md-4 ">
             <div class="poster-container">
-              <img :src="moviePoster || '@/assets/OIP.jpg'"
+              <img :src="'https://image.tmdb.org/t/p/w500'+props.film.poster_path || '@/assets/OIP.jpg'"
                    class="film-poster"
                    @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                    @load="handlePosterLoad"
@@ -81,25 +74,25 @@ const openTrailerModal = (trailer: Trailer) => {
           </div>
           <div class="col-md-8 d-flex flex-column justify-content-start">
             <div class="film-info">
-              <h6 class="film-title text-start">{{ movieTitle }}</h6>
-              <div class="tagline text-start">{{ movieTagline }}</div>
+              <h6 class="film-title text-start">{{ props.film.title }}</h6>
+              <div class="tagline text-start">{{ props.film.tagline }}</div>
               <div class="meta-info">
                 <div class="info-item">
                   <i class="bi bi-calendar"></i>
-                  <span>{{ formatDate(movieReleaseDate) }}</span>
+                  <span>{{formatDate(props.film.release_date) }}</span>
                 </div>
                 <div class="info-item">
                   <i class="bi bi-clock"></i>
-                  <span>{{ formatRuntime(movieRuntime) }}</span>
+                  <span>{{ formatRuntime(props.film.runtime) }}</span>
                 </div>
                 <div class="info-item">
                   <i class="bi bi-globe"></i>
-                  <span>{{ movieSpokenLanguages }}</span>
+                  <span>{{ props.film.original_language }}</span>
                 </div>
               </div>
               <div class="genre-bande d-flex ">
               <div class="genres">
-                <span v-for="genre in movieGenres"
+                <span v-for="genre in props.film.genres"
                       :key="genre.id"
                       class="genre-tag bg-primary text-white">
                   {{ genre.name }}
@@ -107,8 +100,8 @@ const openTrailerModal = (trailer: Trailer) => {
               </div>
               <div class="bande-annonce p-2">
                 <button class = "official-trailer btn btn-warning text-black"
-                        v-if="sortedTrailer.mainTrailer"
-                        @click="openTrailerModal(sortedTrailer.mainTrailer)"
+                        v-if="sortedTrailers.mainTrailer"
+                        @click="openTrailerModal(sortedTrailers.mainTrailer)"
                         style=" border-radius: 20px;
                         font-weight: lighter;
                         padding: 0.1rem 0.30rem;
@@ -118,7 +111,7 @@ const openTrailerModal = (trailer: Trailer) => {
                 </button>
                 <OfficielTrailer
                     ref="officielTrailerRef"
-                    :trailer="sortedTrailer.mainTrailer"
+                    :trailer="sortedTrailers.mainTrailer"
                     :film-id="Number(route.params.id)"
                 />
               </div>
@@ -126,7 +119,7 @@ const openTrailerModal = (trailer: Trailer) => {
 
               <div class="synopsis text-start">
                 <h3>Synopsis</h3>
-                <p style="text-align: justify">{{ movieOverview }}</p>
+                <p style="text-align: justify">{{props.film.overview }}</p>
               </div>
             </div>
           </div>

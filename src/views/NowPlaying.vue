@@ -6,10 +6,7 @@ import CardFilm from "@/components/CardFilm.vue";
 import MoviePagination from "@/components/MoviePagination.vue";
 
 
-defineProps<{
 
-  filmId: number,
-}>();
 
 const films = ref<any[]>([]);
 const loading = ref<boolean>(false);
@@ -28,8 +25,10 @@ const loadMoviesNowPlaying = async (page = 1) => {
       title: string;
       poster_path: string;
       release_date: string;
+      id: number;
     })=> {
       return {
+        id: film.id,
         title: film.title,
         poster_path: film.poster_path,
         release_date: new Date(film.release_date).toLocaleDateString('fr-FR', {

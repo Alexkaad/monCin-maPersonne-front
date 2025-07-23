@@ -8,12 +8,14 @@ import MainActors from "@/components/MainActors.vue";
 import TraillerMovie from "@/components/traillerMovie.vue";
 import {SortedTrailers, Trailer} from "@/entities/Trailer";
 import CardRecommendation from "@/components/CardRecommendation.vue";
+import {Film} from "@/utils/Film";
 
 
 
 
 
-const film = ref<any>({});
+const film = ref<Film>();
+
 const cast = ref<any[]>([]);
 const sortedTrailer = ref<SortedTrailers>({
   mainTrailer: undefined,
@@ -53,47 +55,42 @@ watch(
 
 
 const LoadFilmSingle = async () => {
-
   const movieId = Number(route.params.id);
-  console.log("ID reçu:", movieId, "Type:", typeof movieId);
-
-
   if (!movieId) {
     console.error("ID du film non trouvé");
     return;
   }
 
-
   try {
-
     loading.value = true;
 
-    const response =  await movieService.getMovieById(movieId);
-    film.value =  {
+    const response = await movieService.getMovieById(movieId);
 
-        title : response.title,
-        poster_path : response.poster_path,
-        release_date : response.release_date,
-        overview : response.overview,
-        genres : response.genres,
-        runtime : response.runtime,
-        backdrop_path : response.backdrop_path,
-        tagline : response.tagline,
-      languages: response.spoken_languages?.map((lang: any) => lang.name).join(', ') || ''
+    const mappedFilm: Film = {
+      id: response.id,
+      title: response.title,
+      poster_path: response.poster_path,
+      release_date: response.release_date,
+      overview: response.overview,
+      genres: response.genres, // ici tu gardes tel quel ou tu transformes si besoin
+      runtime: response.runtime,
+      backdrop_path: response.backdrop_path,
+      tagline: response.tagline,
+      original_language: response.spoken_languages?.map((lang: any) => lang.name).join(', ') || '',
+      original_title: response.original_title,
+    };
+    console.log("Film mappé:", film);
+    return film.value = mappedFilm;
 
-    }
-    console.log("Film mappé:", film.value); // Ajoutez ce log
 
-
-  }catch (error) {
-
-    console.log(error);
+  } catch (error) {
+    console.error(error);
     throw error;
-  }finally {
-
+  } finally {
     loading.value = false;
   }
-}
+};
+
 
 const fetchCreditMovie = async () => {
 
@@ -241,10 +238,12 @@ const fetchRecommendation = async (): Promise<void> => {
       title: string;
       poster_path: string;
       id: number;
+      backdrop_path: string;
     }) => ({
       title: film.title,
       poster_path: film.poster_path,
       id: film.id,
+      backdrop_path: film.backdrop_path
     }));
 
   } catch (error) {
@@ -275,16 +274,8 @@ onMounted(() => {
     </div>
     <div  v-else>
       <DetailFilm
-          :movie-poster="'https://image.tmdb.org/t/p/w500'+film.poster_path"
-          :movie-title="film.title || '' "
-          :movie-release-date="film.release_date || ''"
-          :movie-overview="film.overview || ''"
-          :movie-runtime="film.runtime || 0"
-          :movie-genres="film.genres || []"
-          :movie-backdrop="film.backdrop_path || ''"
-          :movie-tagline="film.tagline || ''"
-          :movie-spoken-languages="film.languages || ''"
-          :sorted-trailer="sortedTrailer"
+          :film="film"
+          :sorted-trailers="sortedTrailer"
       />
     </div>
 
@@ -367,8 +358,5 @@ onMounted(() => {
   }
 
 }
-
-
-
 
 </style>

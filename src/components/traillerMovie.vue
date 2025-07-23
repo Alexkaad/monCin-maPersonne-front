@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import {ref, watch} from 'vue'
 import { Trailer} from "@/entities/Trailer";
 
 
@@ -56,12 +56,12 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
       <div class="video-container">
         <iframe
             ref="iframeRef"
-            :src="`https://www.youtube.com/embed/${selected.key}`"
+            :src="`https://www.youtube.com/embed/${selected.key}?rel=0&modestbranding=1&controls=1&showinfo=0&fs=1&playsinline=1&autoplay=1`"
             :title="selected.name"
             width="65%"
             height="440"
             frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
 
         ></iframe>

@@ -44,7 +44,7 @@ export const useColorStore = defineStore('color', {
                     resolve(this.dominantColorRGB);
                 };
 
-                img.src = imageUrl;
+                img.src = 'https://image.tmdb.org/t/p/w500'+ imageUrl;
             });
         }
     }

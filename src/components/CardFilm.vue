@@ -21,8 +21,13 @@ const handleImageLoad = () => {
 
 
 
-const navigateToDetail = () => {
+const navigateToDetail = (event :Event ) => {
   console.log('ID du film:', props.id); // Ajoutez cette ligne pour déboguer
+  if(event?.preventDefault)
+  {
+    event.preventDefault();
+  }
+
   if (props.id) {
     router.push({
       name: 'FilmSingle',
@@ -43,7 +48,7 @@ const navigateToDetail = () => {
   <div class="container carte-film-style-1">
     <div class="card border-1 border-emphasis card-fixed-size">
       <!-- Correction du placement du skeleton loader -->
-      <div class="img-container position-relative" @click="navigateToDetail()">
+      <div class="img-container position-relative" @click="navigateToDetail($event)">
         <div v-if="!imageLoaded" class="skeleton-loader"></div>
         <img :src="poster_path || '@/assets/OIP.jpg'"
              @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"

@@ -56,13 +56,14 @@ watch(() => props.trailer, (newTrailer: Trailer | undefined) => {
         </button>
         <div class="modal-video-container p-3">
           <iframe
-              :src="`https://www.youtube.com/embed/${selectedVideoKey}?rel=0&modestbranding=1&controls=1&showinfo=0&fs=1&playsinline=1&autoplay=1&mute=1&loop=1&playlist=${selectedVideoKey}&origin=${origin}&enablejsapi=1`"
+              :src="`https://www.youtube.com/embed/${selectedVideoKey}?rel=0&modestbranding=1&controls=1&showinfo=0&fs=1&playsinline=1&autoplay=1&origin=${origin}&enablejsapi=1`"
               width="100%"
               height="100%"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
           ></iframe>
+
         </div>
       </div>
     </div>

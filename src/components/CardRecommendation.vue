@@ -8,6 +8,7 @@ const props = defineProps<{
     id: number;
     title: string;
     poster_path: string;
+    backdrop_path:string;
   }>;
 }>();
 
@@ -20,14 +21,19 @@ const handleImageLoad = (filmId: number) => {
   imageLoaded.value[filmId] = true;
 };
 
-const navigateToDetail = (filmId: number) => {
+const navigateToDetail = (filmId: number, event?: Event) => {
+  if (event?.preventDefault) {
+    event.preventDefault();
+  }
+
   if (filmId) {
     router.push({
       name: 'FilmSingle',
       params: { id: filmId.toString() }
     });
   }
-}
+};
+
 </script>
 
 <template>
@@ -43,21 +49,22 @@ const navigateToDetail = (filmId: number) => {
             <div class="img-container position-relative"
                  @click="navigateToDetail(film.id)">
               <div v-if="!imageLoaded[film.id]" class="skeleton-loader"></div>
-              <img :src="'https://image.tmdb.org/t/p/w500' + film.poster_path || '@/assets/OIP.jpg'"
+              <img :src="'https://image.tmdb.org/t/p/w500' + film.backdrop_path || '@/assets/OIP.jpg'"
                    @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                    @load="handleImageLoad(film.id)"
                    class="card-img-top"
                    :alt="film.title"
               >
             </div>
+          </div>
             <div class="card-body d-flex flex-column">
-              <h6 class="card-title-bottom fw-bold" style="color:#374558;">{{ film.title }}</h6>
+              <h6 class="card-title-bottom fw-bold" style="color:#374558;font-size: 0.85rem">{{ film.title }}</h6>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
 
 
 </template>
@@ -117,8 +124,8 @@ const navigateToDetail = (filmId: number) => {
 }
 
 .card-fixed-size {
-  width: 10rem;
-  height: 250px;
+  width: 18rem;
+  height: 140px;
   border-radius: 10px;
   transition: transform 0.3s ease;
 }
@@ -129,16 +136,22 @@ const navigateToDetail = (filmId: number) => {
 }
 
 .img-container {
-  height: 340px;
+  height: 300px;
   overflow: hidden;
   cursor: pointer;
-  border-radius: 10px 10px 0 0;
+  border-radius: 10px 10px 10px 10px;
 }
 
 .card-img-top {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.card-body {
+  height: 30px;
+  padding: 0.5rem 0.75rem;
+
 }
 
 .skeleton-loader {

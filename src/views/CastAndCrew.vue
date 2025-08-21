@@ -3,33 +3,26 @@
 import {computed, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {movieService} from "@/service/TmbdService";
-import {Crew} from "@/entities/Crew";
-import {Cast} from "@/entities/Cast";
 import BaniereComponent from "@/components/BaniereComponent.vue";
+import {CastMember} from "@/utils/CastMember";
+import {CrewMember} from "@/utils/CrewMember";
 
 
 
 
 const route = useRoute();
 
-const technicalTeams = ref<any[]>([]);
-const art = ref<any[]>([]);
-const camera = ref<any[]>([]);
-const costumeMakeUp = ref<any[]>([]);
-const teamTech = ref<any[]>([]);
-const directing = ref<any[]>([]);
-const editing = ref<any[]>([]);
-const production = ref<any[]>([]);
-const sound = ref<any[]>([]);
-const effectVisuels = ref<any[]>([]);
-const light = ref<any[]>([]);
-const writing = ref<any[]>([]);
-const longerTechnicalTeams = ref<number>(0);
-const actorRoles = ref<any[]>([]);
-const loadingCastCrew = ref<boolean>(false);
-const longerActorRoles = ref<number>(0);
+const crewByDepartment = ref<Record<string, CrewMember[]>>({});
+const longerCrewMember = ref<number>(0);
+const cast = ref<CastMember[]>([]);
+const loadingCredit = ref<boolean>(false);
+const longerCastMember = ref<number>(0);
 const imageLoaded = ref(false);
 const film = ref<any>({});
+const writing = computed(() => crewByDepartment.value['Writing'] || []);
+const makeUp = computed(() => crewByDepartment.value['Costume & Make-Up'] || []);
+const sound = computed(() => crewByDepartment.value['Sound'] || []);
+const visualEffects = computed(() => crewByDepartment.value['Visual Effects'] || []);
 
 
 
@@ -61,10 +54,11 @@ const loadMovieDetails = async () => {
 };
 
 
-const groupedCostumeMakeUp = computed(() => {
-  const grouped = new Map();
 
-  costumeMakeUp.value.forEach((crew: Crew) => {
+const groupedMakeUp= computed(() => {
+  const grouped =new Map<number, any>();
+
+  makeUp.value.forEach((crew: CrewMember) => {
     if (!grouped.has(crew.id)) {
       grouped.set(crew.id, {
         ...crew,
@@ -78,10 +72,11 @@ const groupedCostumeMakeUp = computed(() => {
   return Array.from(grouped.values());
 });
 
+
 const groupedSound = computed(() => {
   const grouped = new Map();
 
-  sound.value.forEach((crew: Crew) => {
+  sound.value.forEach((crew: CrewMember) => {
     if (!grouped.has(crew.id)) {
       grouped.set(crew.id, {
         ...crew,
@@ -98,7 +93,7 @@ const groupedSound = computed(() => {
 const groupedEffectVisuels = computed(() => {
   const grouped = new Map();
 
-  effectVisuels.value.forEach((crew: Crew) => {
+  visualEffects.value.forEach((crew: CrewMember) => {
     if (!grouped.has(crew.id)) {
       grouped.set(crew.id, {
         ...crew,
@@ -112,10 +107,12 @@ const groupedEffectVisuels = computed(() => {
   return Array.from(grouped.values());
 });
 
+
+/*
 const groupedCamera = computed(() => {
   const grouped = new Map();
 
-  camera.value.forEach((crew: Crew) => {
+  camera.value.forEach((crew: CrewMember) => {
     if (!grouped.has(crew.id)) {
       grouped.set(crew.id, {
         ...crew,
@@ -128,13 +125,13 @@ const groupedCamera = computed(() => {
 
   return Array.from(grouped.values());
 });
-
+*/
 
 
 const groupedWriting = computed(() => {
-  const grouped = new Map();
+  const grouped =new Map<number, any>();
 
-  writing.value.forEach((crew: Crew) => {
+  writing.value.forEach((crew: CrewMember) => {
     if (!grouped.has(crew.id)) {
       grouped.set(crew.id, {
         ...crew,
@@ -147,6 +144,8 @@ const groupedWriting = computed(() => {
 
   return Array.from(grouped.values());
 });
+
+
 
 
 
@@ -163,39 +162,17 @@ const loadCastCrew = async () => {
 
   try{
 
-    loadingCastCrew.value = true;
+    loadingCredit.value = true;
     const response = await movieService.getCreditMovie(movieId);
 
-    actorRoles.value = response.cast.filter((cast: Cast) => cast);
+    cast.value = response.cast;
+    crewByDepartment.value = response.crew;
 
-    longerActorRoles.value = actorRoles.value.length;
-
-    technicalTeams.value = response.crew.filter((crew: Crew) => crew);
-
-    longerTechnicalTeams.value = technicalTeams.value.length;
-
-    art.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Art');
-
-    camera.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Camera');
-
-    costumeMakeUp.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Costume & Make-Up');
-
-    teamTech.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Crew');
-
-    directing.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Directing');
-
-    editing.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Editing');
-
-    light.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Lighting');
-
-    production.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Production');
-
-    sound.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Sound');
-
-    effectVisuels.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Visual Effects');
-    console.log('voici le resultat d\'effet visuel:',effectVisuels.value);
-
-    writing.value = technicalTeams.value.filter((crew: Crew) => crew.department === 'Writing');
+    longerCastMember.value = response.cast.length;
+    longerCrewMember.value = Object.values(response.crew as Record<string, CrewMember[]>).reduce(
+        (acc, dept) => acc + dept.length,
+        0
+    );
 
 
   } catch (error) {
@@ -206,7 +183,7 @@ const loadCastCrew = async () => {
 
   }finally{
 
-    loadingCastCrew.value = false;
+    loadingCredit.value = false;
   }
 }
 
@@ -223,7 +200,7 @@ onMounted(()=>{
 
   <div class="container-fluid cast-crew-view bg-body-secondary" style="margin-top: 72px">
     <div class="content-wrapper">
-      <div v-if="loadingCastCrew || !film.title" class="loading-container">
+      <div v-if="loadingCredit|| !film.title" class="loading-container">
         <div class="banner-placeholder"></div>
         Chargement...
       </div>
@@ -239,12 +216,12 @@ onMounted(()=>{
               <h4 class="section-title justify-content-start fw-bold text-black p-4">Distribution des rôles
                 <span
                     class="section-longerActorRoles justify-content-start align-items-start fs-4 fw-light text-secondary">{{
-                    longerActorRoles
+                    longerCastMember
                   }}</span>
               </h4>
             </div>
             <div class="section-content-actor bgf">
-              <h6 v-if="actorRoles.length > 0"
+              <h6 v-if="cast.length > 0"
                   class="card-title fw-bold p-2 text-black"
                   style="font-family:'MS PGothic',sans-serif"
                   data-bs-toggle="collapse"
@@ -258,16 +235,16 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-actors-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="cast in actorRoles" :key="cast.id">
-                  <img :src="`https://image.tmdb.org/t/p/w500${ cast.profile_path}`|| '@/assets/OIP.jpg'"
+                <div class="card mt-2" v-for="member in cast " :key="member.id">
+                  <img :src="`https://image.tmdb.org/t/p/w500${ member.profile_path}`|| '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
                        class="card-img-top"
                        alt="titre-image"
                   >
                   <div class="card-body p-2">
-                    <p class="card-text fw-bolder small mb-0">{{ cast.name }}</p>
-                    <span class="cart-post small mt-1">{{ cast.character }}</span>
+                    <p class="card-text fw-bolder small mb-0">{{ member.name }}</p>
+                    <span class="cart-post small mt-1" style="color: #032541;">{{ member.character }}</span>
                   </div>
                 </div>
               </div>
@@ -278,11 +255,11 @@ onMounted(()=>{
           <div class="section-content">
             <h4 class="section-title fw-bold justify-content-start p-3">Equipe technique
               <span class="section-longerTechnicalTeams fs-4 fw-light text-secondary">
-                {{ longerTechnicalTeams }}</span>
+                {{ longerCrewMember }}</span>
             </h4>
             <div class="bgf d-flex ">
               <h6
-                  v-if="art.length > 0"
+                  v-if="crewByDepartment.Art && crewByDepartment.Art.length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-art-section"
                   aria-expanded="false"
@@ -295,7 +272,7 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-art-section">
               <div class="card-container ">
-                <div class="card " v-for="crew in art" :key="crew.id">
+                <div class="card " v-for="crew in crewByDepartment.Art" :key="crew.id">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -311,7 +288,7 @@ onMounted(()=>{
             </div>
             <div class="bgf d-flex ">
               <h6
-                  v-if="camera.length > 0"
+                  v-if="crewByDepartment.Camera && crewByDepartment.Camera.length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-camera-section"
                   aria-expanded="false"
@@ -324,7 +301,7 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-camera-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in groupedCamera" :key="crew.id">
+                <div class="card mt-2" v-for="crew in crewByDepartment.Camera" :key="crew.id">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -333,14 +310,15 @@ onMounted(()=>{
                   >
                   <div class="card-body p-2">
                     <p class="card-text fw-bolder small mb-0">{{ crew.name }}</p>
-                    <span class="cart-post small mt-1">{{ crew.job }}</span>
+                    <span class="cart-post small mt-1" style="color:#032541">{{ crew.job }}</span>
                   </div>
                 </div>
               </div>
             </div>
             <div class="bgf d-flex align-items-start">
               <h6
-                  v-if="costumeMakeUp.length > 0"
+                  v-if="crewByDepartment['Costume & Make-Up']
+                  && crewByDepartment['Costume & Make-Up'].length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-costume-section"
                   aria-expanded="false"
@@ -353,7 +331,7 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-costume-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in groupedCostumeMakeUp" :key="crew.id">
+                <div class="card mt-2" v-for="crew in groupedMakeUp" :key="crew.id">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -374,7 +352,7 @@ onMounted(()=>{
             </div>
             <div class="bgf d-flex align-items-start">
               <h6
-                  v-if="teamTech.length > 0"
+                  v-if="crewByDepartment.Crew && crewByDepartment.Crew.length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-equipe-technique-section"
                   aria-expanded="false"
@@ -387,7 +365,7 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-equipe-technique-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in teamTech" :key="crew.id">
+                <div class="card mt-2" v-for="crew in crewByDepartment.Crew" :key="crew.id">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -403,7 +381,7 @@ onMounted(()=>{
             </div>
             <div class="bgf d-flex align-items-start">
               <h6
-                  v-if="directing.length > 0"
+                  v-if="crewByDepartment.Directing && crewByDepartment.Directing.length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-directing-section"
                   aria-expanded="false"
@@ -416,7 +394,7 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-directing-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in directing" :key="crew.id">
+                <div class="card mt-2" v-for="crew in crewByDepartment.Directing" :key="crew.id">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -432,7 +410,7 @@ onMounted(()=>{
             </div>
             <div class="bgf d-flex align-items-start">
               <h6
-                  v-if="editing.length > 0"
+                  v-if="crewByDepartment.Editing && crewByDepartment.Editing.length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-editing-section"
                   aria-expanded="false"
@@ -445,7 +423,7 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-editing-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in editing" :key="crew.id">
+                <div class="card mt-2" v-for="crew in crewByDepartment.Editing" :key="crew.id">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -461,7 +439,7 @@ onMounted(()=>{
             </div>
             <div class="bgf d-flex align-items-start">
               <h6
-                  v-if="light.length > 0"
+                  v-if="crewByDepartment.Lighting && crewByDepartment.Lighting.length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-light-section"
                   aria-expanded="false"
@@ -474,7 +452,7 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-light-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in light" :key="crew.id">
+                <div class="card mt-2" v-for="crew in crewByDepartment.Lighting" :key="crew.id">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -490,7 +468,7 @@ onMounted(()=>{
             </div>
             <div class="bgf d-flex align-items-start">
               <h6
-                  v-if="production.length > 0"
+                  v-if="crewByDepartment.Production && crewByDepartment.Production.length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-production-section"
                   aria-expanded="false"
@@ -503,7 +481,7 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-production-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in production" :key="crew.id">
+                <div class="card mt-2" v-for="crew in crewByDepartment.Production" :key="crew.id">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -519,7 +497,7 @@ onMounted(()=>{
             </div>
             <div class="bgf d-flex align-items-start">
               <h6
-                  v-if="sound.length > 0"
+                  v-if="crewByDepartment.Sound && crewByDepartment.Sound.length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-sound-section"
                   aria-expanded="false"
@@ -553,7 +531,7 @@ onMounted(()=>{
             </div>
             <div class="bgf d-flex align-items-start">
               <h6
-                  v-if="effectVisuels.length > 0"
+                  v-if="crewByDepartment['Visual Effects'] && crewByDepartment['Visual Effects'].length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-effectVisuel-section"
                   aria-expanded="false"
@@ -587,7 +565,7 @@ onMounted(()=>{
             </div>
             <div class="bgf d-flex align-items-start">
               <h6
-                  v-if="writing.length > 0"
+                  v-if="crewByDepartment.Writing && crewByDepartment.Writing.length > 0"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapse-writing-section"
                   aria-expanded="false"
@@ -613,7 +591,7 @@ onMounted(()=>{
                   <span v-for="(job, index) in crew.jobs"
                         :key="index"
                         class="cart-post small mt-1 d-block">
-                    {{ crew.job }}
+                    {{ job }}
                   </span>
                     </div>
                   </div>
@@ -627,6 +605,9 @@ onMounted(()=>{
   </div>
 </template>
 
+
+
+
 <style scoped>
 
 .section-content {
@@ -637,10 +618,9 @@ onMounted(()=>{
 
 .card-container {
   gap: 1rem;
-  grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+  grid-template-columns: repeat(2, 1fr);
   display: grid;
 }
-
 
 .card {
   width: 7rem;
@@ -657,10 +637,6 @@ onMounted(()=>{
   transition: all 0.3s ease;
 }
 
-.jobs-container {
-  max-height: 80px;
-  overflow-y: auto;
-}
 
 .bgf {
   width: 100% ! important;
@@ -691,6 +667,7 @@ onMounted(()=>{
 .cart-post {
   display: block;
   line-height: 1.2;
+  color: #032541;
 }
 
 .card-img-top {

@@ -36,8 +36,8 @@ const bannerStyle = computed(() => ({
         />
       </div>
       <div class="title-container d-flex p-2">
-        <h2 class="p-1">{{ title }}</h2>
-        <h2 class="p-1">({{ releaseDate }})</h2>
+        <h2 class="p-1 text-white">{{ title }}</h2>
+        <h2 class="p-1 text-white">({{ releaseDate }})</h2>
       </div>
     </div>
   </div>

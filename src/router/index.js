@@ -40,10 +40,19 @@ const routes = [
     },
 
     {
+        path: '/Person/:id',
+        name: 'PersonSingle',
+        component: () => import('@/views/PersonSingle.vue'),
+        props: true
+    },
+
+    {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
         component: () => import('@/views/NotFound.vue') // Créez ce composant
     },
+
+
 
 
 

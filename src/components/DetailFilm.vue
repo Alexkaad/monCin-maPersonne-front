@@ -90,31 +90,32 @@ const openTrailerModal = (trailer: Trailer) => {
                   <span>{{ props.film.original_language }}</span>
                 </div>
               </div>
-              <div class="genre-bande d-flex ">
-              <div class="genres">
+              <div class="genre-bande d-flex justify-content-start align-items-center ">
+                <div class="genres">
                 <span v-for="genre in props.film.genres"
                       :key="genre.id"
                       class="genre-tag bg-primary text-white">
                   {{ genre.name }}
                 </span>
-              </div>
-              <div class="bande-annonce p-2">
-                <button class = "official-trailer btn btn-warning text-black"
-                        v-if="sortedTrailers.mainTrailer"
-                        @click="openTrailerModal(sortedTrailers.mainTrailer)"
-                        style=" border-radius: 20px;
-                        font-weight: lighter;
-                        padding: 0.1rem 0.30rem;
-                        font-size: 0.70rem;"
-                >
-                  Voir la bande-annonce
-                </button>
-                <OfficielTrailer
-                    ref="officielTrailerRef"
-                    :trailer="sortedTrailers.mainTrailer"
-                    :film-id="Number(route.params.id)"
-                />
-              </div>
+                </div>
+                <div class="bande-annonce" style="padding: 0 0 15px 15px">
+                  <button class="official-trailer btn btn-warning text-black"
+                          v-if="sortedTrailers.mainTrailer"
+                          @click="openTrailerModal(sortedTrailers.mainTrailer)"
+                          style=" border-radius: 20px;
+                          font-weight: bold;
+                          padding: 0.1rem 0.35rem;
+                          font-size: 0.70rem;"
+
+                  >
+                    Voir la bande-annonce
+                  </button>
+                  <OfficielTrailer
+                      ref="officielTrailerRef"
+                      :trailer="sortedTrailers.mainTrailer"
+                      :film-id="Number(route.params.id)"
+                  />
+                </div>
               </div>
 
               <div class="synopsis text-start">
@@ -222,7 +223,7 @@ const openTrailerModal = (trailer: Trailer) => {
   padding: 0.5rem 1rem;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  font-size: 0.90rem;
+  font-size: 0.70rem;
 }
 
 .synopsis {
@@ -260,6 +261,8 @@ const openTrailerModal = (trailer: Trailer) => {
     margin-top: 50px;
   }
 
+
+
   .synopsis p {
     line-height: 1.3 !important;
     font-size: 1rem !important;
@@ -272,11 +275,11 @@ const openTrailerModal = (trailer: Trailer) => {
 
   .genre-bande{
 
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 0.20rem;
+    display: flex!important;
+    flex-direction: column!important;
+    align-items: flex-start!important;
+    justify-content: center !important;
+    gap: 0.20rem!important;
   }
 
   .content-wrapper {
@@ -474,6 +477,14 @@ const openTrailerModal = (trailer: Trailer) => {
   .film-info {
     margin-top: 0.10rem!important;
     padding: 0;
+  }
+
+  .official-trailer{
+
+   width: 5.5rem !important;
+    font-size: 0.40rem !important;
+
+
   }
 }
 </style>

@@ -1,13 +1,15 @@
 <script setup lang="ts">
 
 import {computed, ref} from "vue";
+import router from "@/router";
+
 
 
 const props = defineProps<{
   cast: Array<{
     id: number,
     name: string,
-    role: string,
+    character: string,
     poster_path: string,
     order: number,
   }>
@@ -15,7 +17,7 @@ const props = defineProps<{
 
 
 
-const imageLoaded = ref(false)
+const imageLoaded = ref<boolean>(false)
 
 const handleImageLoad = () => {
   imageLoaded.value = true
@@ -26,6 +28,25 @@ const mainCast= computed (() => {
 
    return props.cast.slice(0, 8);
  })
+
+const navigateToCastAndCrew = (event: Event) => {
+  event.preventDefault();
+  router.push({ name: 'Cast&Crew' });
+};
+
+const navigateToPerson = ( personId : number ,event: Event) => {
+
+  if (event?.preventDefault) {
+    event.preventDefault();
+  }
+
+  if (personId) {
+    router.push({name: 'PersonSingle'
+    , params: { id: personId.toString() }});
+  }
+}
+
+
 
 
 </script>
@@ -47,15 +68,16 @@ const mainCast= computed (() => {
                  class="card-img-top"
                  alt="titre-image"
                  @load="handleImageLoad"
+                 @click="navigateToPerson(actor.id,$event)"
             >
           </div>
           <div class="card-body d-flex flex-column">
-            <h6 class="card-title-bottom fw-bold" style="color:#374558;">
+            <h6 class="card-title-bottom fw-bold" style="color:#4f3244;">
               {{ actor.name }}
             </h6>
             <span class="card-title-bottom release_date fw-bold m-0"
-                  style="font-family:Helvetica, sans-serif; color: #979bb5">
-            {{ actor.role }}
+                  style="font-family:Helvetica, sans-serif; color: #374558">
+            {{ actor.character }}
           </span>
           </div>
         </div>
@@ -63,7 +85,7 @@ const mainCast= computed (() => {
 
     <div class="container show-list mt-4 ">
       <div class="lien-wrapper d-flex justify-content-start p-1" style="width: 100%;">
-      <span class="fw-bold lien-cliclable " @click="$router.push({name: 'Cast&Crew'})">
+      <span class="fw-bold lien-cliclable " @click="navigateToCastAndCrew($event)">
         Voir la liste complete des distributions des rôles et equipe technique
       </span>
       </div>

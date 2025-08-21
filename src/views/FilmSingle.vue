@@ -9,6 +9,7 @@ import TraillerMovie from "@/components/traillerMovie.vue";
 import {SortedTrailers, Trailer} from "@/entities/Trailer";
 import CardRecommendation from "@/components/CardRecommendation.vue";
 import {Film} from "@/utils/Film";
+import {mapCasting} from "@/utils/CastMember";
 
 
 
@@ -25,32 +26,13 @@ const sortedTrailer = ref<SortedTrailers>({
 
 
 const loading = ref<boolean>(false);
-const loadingCast = ref(false)
-const loadingTrailer = ref(false)
+const loadingCast = ref<boolean>(false)
+const loadingTrailer = ref<boolean>(false)
 const route = useRoute();
 const loadingRecommendation = ref<boolean>(false);
 const recommendations = ref<any[]>([]);
 
-watch(
-    () => route.params.id,
-    async (newId) => {
-      if (newId) {
-        // Réinitialiser les états
-        loading.value = true;
-        loadingCast.value = true;
-        loadingTrailer.value = true;
-        loadingRecommendation.value = true;
 
-        // Recharger toutes les données
-        await Promise.all([
-          LoadFilmSingle(),
-          fetchCreditMovie(),
-          fetchTrailers(),
-          fetchRecommendation()
-        ]);
-      }
-    }
-);
 
 
 
@@ -118,25 +100,8 @@ const fetchCreditMovie = async () => {
        return;
      }
 
-     cast.value = response.cast.map((cast : {
-      id: number,
-      name: string,
-      character: string,
-      profile_path: string | null,
-
-    })=> {
-
-      return {
-        id: cast.id,
-        name: cast.name,
-        role: cast.character, // 'character' de l'API devient 'role' dans notre interface
-        poster_path: cast.profile_path
-            ? `https://image.tmdb.org/t/p/w500${cast.profile_path}`
-            : '@/assets/OIP.jpg',
-      }
-
-   });
-
+     cast.value = mapCasting(response.cast);
+     console.log('Casting:', cast);
 
 }catch(error) {
 
@@ -253,6 +218,27 @@ const fetchRecommendation = async (): Promise<void> => {
     loadingRecommendation.value = false;
   }
 };
+
+watch(
+    () => route.params.id,
+    async (newId) => {
+      if (newId) {
+        // Réinitialiser les états
+        loading.value = true;
+        loadingCast.value = true;
+        loadingTrailer.value = true;
+        loadingRecommendation.value = true;
+
+        // Recharger toutes les données
+        await Promise.all([
+          LoadFilmSingle(),
+          fetchCreditMovie(),
+          fetchTrailers(),
+          fetchRecommendation()
+        ]);
+      }
+    }
+);
 
 onMounted(() => {
 

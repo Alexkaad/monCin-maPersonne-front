@@ -6,7 +6,12 @@ import {useRouter} from "vue-router";
 
 const router = useRouter();
 
-const goToUpcoming = async () => {
+const goToUpcoming = async (event : Event) => {
+
+  if(event?.preventDefault)
+  {
+    event.preventDefault();
+  }
   try {
 
     await router.push({ name: 'UpcomingMovies' })
@@ -17,7 +22,12 @@ const goToUpcoming = async () => {
   }
 }
 
-const goToPopular = async () => {
+const goToPopular = async (event : Event) => {
+  if(event?.preventDefault)
+  {
+    event.preventDefault();
+  }
+
   try {
 
     await router.push({name: 'PopularMovies'})
@@ -29,7 +39,13 @@ const goToPopular = async () => {
 
 }
 
-const goToNowPlaying = async () => {
+const goToNowPlaying = async (event : Event) => {
+
+  if(event?.preventDefault)
+  {
+    event.preventDefault();
+  }
+
   try {
 
     await router.push({ name: 'NowPlayingMovies' })
@@ -46,21 +62,50 @@ const goToNowPlaying = async () => {
 
 <template>
 
-  <nav class="navbar g-3 m-0 ">
-    <div class="container d-flex justify-content-between align-items-center p-1">
+  <nav class="navbar  m-0 ">
+    <div class="container d-flex align-items-center p-1">
       <!-- Logo group -->
+      <div class ="logo-group d-flex justify-content-between" style="width: 28%">
       <div class="logo-group">
         <h1 class="mb-0 fs-1 fw-bold titre-style" style="font-weight:900">MyCP</h1>
         <i class="bi bi-camera-reels fw-bold text-black"></i>
       </div>
 
       <!-- Navigation links -->
-      <ul class="nav-links list-unstyled d-flex mb-0 fw-bold fs-5">
-        <li @click="goToUpcoming" class="nav-link">À venir</li>
-        <li @click="goToPopular" class="nav-link">Populaire</li>
-        <li @click="goToNowPlaying" class="nav-link">En salle</li>
-      </ul>
+      <div class="dropdown ">
+        <a
+            class=" dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            style="font-size: 18px;font-weight: bold;"
 
+        >
+          Film
+        </a>
+        <ul class="dropdown-menu list-unstyled fw-bold ">
+          <li
+              @click="goToUpcoming"
+              class="dropdown-item"
+              style="font-size: 15px"
+          >À venir
+          </li>
+          <li
+              @click="goToPopular"
+              class="dropdown-item fs-6"
+              style="font-size: 15px">
+            Populaire
+          </li>
+          <li
+              @click="goToNowPlaying"
+              class="dropdown-item fs-6"
+              style="font-size: 15px"
+          >
+            En salle
+          </li>
+        </ul>
+      </div>
+      </div>
       <!-- User icon -->
       <div class="icon-person">
         <i class="bi bi-person text-black fs-4 fw-bolder"></i>
@@ -89,24 +134,28 @@ const goToNowPlaying = async () => {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.dropdown-toggle::after {
+  display: none !important;
+}
+.dropdown-toggle:hover{
+  cursor: pointer;
+  color: #42b983;
+
+}
 .logo-group {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.nav-links {
-  display: flex;
-  gap: 1rem;
-  margin: 0 2rem;
-}
 
-.nav-link {
+
+.dropdown-item {
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.nav-link:hover {
+.dropdown-item:hover {
   color: #42b983; /* ou la couleur de votre choix */
 }
 

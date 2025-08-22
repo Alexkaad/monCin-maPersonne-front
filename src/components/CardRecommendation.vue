@@ -46,8 +46,7 @@ const navigateToDetail = (filmId: number, event?: Event) => {
              :key="film.id"
              class="recommendation-card">
           <div class="card border-1 border-emphasis card-fixed-size">
-            <div class="img-container position-relative"
-                 @click="navigateToDetail(film.id)">
+            <div class="img-container position-relative" @click="navigateToDetail(film.id)">
               <div v-if="!imageLoaded[film.id]" class="skeleton-loader"></div>
               <img :src="'https://image.tmdb.org/t/p/w500' + film.backdrop_path || '@/assets/OIP.jpg'"
                    @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
@@ -64,9 +63,6 @@ const navigateToDetail = (filmId: number, event?: Event) => {
         </div>
       </div>
     </div>
-
-
-
 </template>
 
 <style scoped>
@@ -173,6 +169,4 @@ const navigateToDetail = (filmId: number, event?: Event) => {
     background-position: -200% 0;
   }
 }
-
-
 </style>

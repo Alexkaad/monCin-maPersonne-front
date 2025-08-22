@@ -40,9 +40,6 @@ watch(() => props.trailers, (newTrailers: Trailer[]) => {
   }
 }, {immediate: true});
 
-
-
-
 </script>
 
 <template>

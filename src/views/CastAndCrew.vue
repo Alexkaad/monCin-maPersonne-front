@@ -4,8 +4,9 @@ import {computed, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {movieService} from "@/service/TmbdService";
 import BaniereComponent from "@/components/BaniereComponent.vue";
-import {CastMember} from "@/utils/CastMember";
-import {CrewMember} from "@/utils/CrewMember";
+import {CastMember} from "@/entites/CastMember";
+import {CrewMember} from "@/entites/CrewMember";
+import router from "@/router";
 
 
 
@@ -145,11 +146,6 @@ const groupedWriting = computed(() => {
   return Array.from(grouped.values());
 });
 
-
-
-
-
-
 const loadCastCrew = async () => {
 
   const movieId = Number(route.params.id);
@@ -184,6 +180,18 @@ const loadCastCrew = async () => {
   }finally{
 
     loadingCredit.value = false;
+  }
+}
+
+const navigateToPerson = ( personId : number ,event: Event) => {
+
+  if (event?.preventDefault) {
+    event.preventDefault();
+  }
+
+  if (personId) {
+    router.push({name: 'PersonSingle'
+      , params: { id: personId.toString() }});
   }
 }
 
@@ -233,9 +241,9 @@ onMounted(()=>{
               </h6>
 
             </div>
-            <div class="collapse collapse-vertical" id="collapse-actors-section">
-              <div class="card-container ">
-                <div class="card mt-2" v-for="member in cast " :key="member.id">
+            <div class="collapse collapse-vertical" id="collapse-actors-section" >
+              <div class="card-container" >
+                <div class="card mt-2" v-for="member in cast " :key="member.id" @click="navigateToPerson(member.id,$event)">
                   <img :src="`https://image.tmdb.org/t/p/w500${ member.profile_path}`|| '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -271,8 +279,8 @@ onMounted(()=>{
               </h6>
             </div>
             <div class="collapse collapse-vertical" id="collapse-art-section">
-              <div class="card-container ">
-                <div class="card " v-for="crew in crewByDepartment.Art" :key="crew.id">
+              <div class="card-container " >
+                <div class="card " v-for="crew in crewByDepartment.Art" :key="crew.id" @click="navigateToPerson(crew.id,$event)">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -301,7 +309,7 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-camera-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in crewByDepartment.Camera" :key="crew.id">
+                <div class="card mt-2" v-for="crew in crewByDepartment.Camera" :key="crew.id" @click="navigateToPerson(crew.id,$event)">
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"

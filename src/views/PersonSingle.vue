@@ -9,6 +9,9 @@ import PersonDetails from "@/components/PersonDetails.vue";
 const route = useRoute();
 const person = ref<Person>();
 
+
+
+
 const LoadPerson = async () => {
 
   const id = Number(route.params.id)
@@ -36,6 +39,7 @@ onMounted(() => {
 
   <div class="container">
     <PersonDetails
+        class="m-0 p-0"
       v-if="person" :person = 'person'
       />
   </div>

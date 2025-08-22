@@ -58,9 +58,9 @@ const navigateToPerson = ( personId : number ,event: Event) => {
     </div>
 
 
-      <div class="container main-actors-style-1 " >
+      <div class="container main-actors-style-1 "  >
         <!-- Utilisez mainCast au lieu de cast -->
-        <div v-for="actor in mainCast" :key="actor.id" class="card border-1 border-emphasis card-fixed-size">
+        <div v-for="actor in mainCast" :key="actor.id" class="card border-1 border-emphasis card-fixed-size" @click="navigateToPerson(actor.id,$event)">
           <div class="img-container position-relative">
             <div v-if="!imageLoaded" class="skeleton-loader"></div>
             <img :src="actor.poster_path || '@/assets/OIP.jpg'"
@@ -68,7 +68,7 @@ const navigateToPerson = ( personId : number ,event: Event) => {
                  class="card-img-top"
                  alt="titre-image"
                  @load="handleImageLoad"
-                 @click="navigateToPerson(actor.id,$event)"
+
             >
           </div>
           <div class="card-body d-flex flex-column">
@@ -101,6 +101,7 @@ const navigateToPerson = ( personId : number ,event: Event) => {
 
 .card-fixed-size:hover {
   transform: scale(1.05);
+  cursor: pointer;
 }
 
 

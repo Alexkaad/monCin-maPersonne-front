@@ -5,7 +5,7 @@ import OfficielTrailer from "@/components/officielTrailer.vue";
 import {SortedTrailers, Trailer} from "@/entities/Trailer";
 import {useRoute} from "vue-router";
 import {useColorStore} from "@/store/ColorStore";
-import {Film} from "@/utils/Film";
+import {Film} from "@/entites/Film";
 
 
 const props = defineProps<{

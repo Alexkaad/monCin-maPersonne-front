@@ -1,4 +1,4 @@
-import {Genre} from "@/utils/Genre";
+import {Genre} from "@/entites/Genre";
 
 export interface Film {
 

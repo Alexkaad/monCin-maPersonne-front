@@ -8,8 +8,8 @@ import MainActors from "@/components/MainActors.vue";
 import TraillerMovie from "@/components/traillerMovie.vue";
 import {SortedTrailers, Trailer} from "@/entities/Trailer";
 import CardRecommendation from "@/components/CardRecommendation.vue";
-import {Film} from "@/utils/Film";
-import {mapCasting} from "@/utils/CastMember";
+import {Film} from "@/entites/Film";
+import {mapCasting} from "@/entites/CastMember";
 
 
 
@@ -241,7 +241,6 @@ watch(
 );
 
 onMounted(() => {
-
   LoadFilmSingle();
   fetchCreditMovie();
   fetchTrailers();

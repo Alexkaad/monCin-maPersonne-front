@@ -243,7 +243,10 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-actors-section" >
               <div class="card-container" >
-                <div class="card mt-2" v-for="member in cast " :key="member.id" @click="navigateToPerson(member.id,$event)">
+                <div
+                    class="card mt-2" v-for="member in cast "
+                    :key="member.id" @click="navigateToPerson(member.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${ member.profile_path}`|| '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -280,7 +283,10 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-art-section">
               <div class="card-container " >
-                <div class="card " v-for="crew in crewByDepartment.Art" :key="crew.id" @click="navigateToPerson(crew.id,$event)">
+                <div
+                    class="card " v-for="crew in crewByDepartment.Art"
+                    :key="crew.id" @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -309,7 +315,10 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-camera-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in crewByDepartment.Camera" :key="crew.id" @click="navigateToPerson(crew.id,$event)">
+                <div
+                    class="card mt-2" v-for="crew in crewByDepartment.Camera"
+                    :key="crew.id" @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -339,7 +348,10 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-costume-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in groupedMakeUp" :key="crew.id">
+                <div class="card mt-2" v-for="crew in groupedMakeUp"
+                     :key="crew.id"
+                     @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -373,7 +385,11 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-equipe-technique-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in crewByDepartment.Crew" :key="crew.id">
+                <div
+                    class="card mt-2" v-for="crew in crewByDepartment.Crew"
+                    :key="crew.id"
+                    @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -402,7 +418,11 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-directing-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in crewByDepartment.Directing" :key="crew.id">
+                <div
+                    class="card mt-2" v-for="crew in crewByDepartment.Directing"
+                    :key="crew.id"
+                    @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -431,7 +451,10 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-editing-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in crewByDepartment.Editing" :key="crew.id">
+                <div class="card mt-2" v-for="crew in crewByDepartment.Editing"
+                     :key="crew.id"
+                     @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -460,7 +483,10 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-light-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in crewByDepartment.Lighting" :key="crew.id">
+                <div class="card mt-2" v-for="crew in crewByDepartment.Lighting"
+                     :key="crew.id"
+                     @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -489,7 +515,11 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-production-section">
               <div class="card-container ">
-                <div class="card mt-2" v-for="crew in crewByDepartment.Production" :key="crew.id">
+                <div
+                    class="card mt-2" v-for="crew in crewByDepartment.Production"
+                    :key="crew.id"
+                    @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -518,7 +548,11 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-sound-section">
               <div class="card-container">
-                <div class="card mt-2" v-for="crew in groupedSound" :key="crew.id">
+                <div
+                    class="card mt-2" v-for="crew in groupedSound"
+                    :key="crew.id"
+                    @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -552,7 +586,11 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-effectVisuel-section">
               <div class="card-container">
-                <div class="card mt-2" v-for="crew in groupedEffectVisuels" :key="crew.id">
+                <div
+                    class="card mt-2" v-for="crew in groupedEffectVisuels"
+                    :key="crew.id"
+                    @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -586,7 +624,10 @@ onMounted(()=>{
             </div>
             <div class="collapse collapse-vertical" id="collapse-writing-section">
               <div class="card-container">
-                <div class="card mt-2" v-for="crew in groupedWriting" :key="crew.id">
+                <div class="card mt-2" v-for="crew in groupedWriting"
+                     :key="crew.id"
+                     @click="navigateToPerson(crew.id,$event)"
+                >
                   <img :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
                        @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
                        @load="handleImageLoad"
@@ -612,8 +653,6 @@ onMounted(()=>{
     </div>
   </div>
 </template>
-
-
 
 
 <style scoped>

@@ -78,6 +78,7 @@ onMounted(() => {
       v-if="person && network"
         :person = 'person'
         :network='network'
+        :homepage='person.homepage'
       />
   </div>
 

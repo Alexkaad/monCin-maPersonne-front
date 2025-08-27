@@ -8,10 +8,11 @@ const props = defineProps<{
 
 <template>
 
-  <div class="container" style="width: 4rem">
+  <div class="logo-facebook" style="width: 2.5rem ; ">
 
-    <a :href="`https://facebook.com/${props.facebook_id}`" target="_blank" rel="noopener"></a>
+    <a :href="`https://facebook.com/${props.facebook_id}`" target="_blank" rel="noopener">
       <img style="object-fit: cover; width:100%" src="@/assets/facebook-logo-94.png" alt="logo facebook">
+    </a>
   </div>
   
 </template>

@@ -23,7 +23,7 @@ const props = defineProps<{
 
   <div class="container "  >
     <div class="wrapper" >
-      <div class="d-flex justify-content-start gap-2" >
+      <div class="d-flex justify-content-start  align-items-center gap-2" >
         <div class="facebook-person" v-if="props.facebook_id">
           <facebook-person :facebook_id="props.facebook_id"/>
         </div>

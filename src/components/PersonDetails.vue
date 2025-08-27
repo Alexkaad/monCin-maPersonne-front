@@ -131,8 +131,11 @@ function  extracTitle (role:string) : string {
             <p v-if="person.gender">{{ person.gender }}</p>
             <p v-else>---</p>
           </div>
+          <div v-if="person.deathday && person.deathday.length >0" class="title-place-of-death d-flex flex-column align-items-start">
+            <span class="fw-bold">Déceder le</span>
+          <p >{{ person.deathday }}</p>
 
-          <p>{{ person.deathday }}</p>
+          </div>
         </div>
       </div>
       <div class="bio-name p-5" style="margin-top:78px">

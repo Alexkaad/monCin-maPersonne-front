@@ -4,11 +4,18 @@ import {Person} from "@/entities/Person";
 import {useBannerStyle} from "@/utils/ColorStyle";
 import {ref} from "vue";
 import {useBiogra} from "@/utils/UtilFunctionaly";
+import NetworkPerson from "@/components/NetworkPerson.vue";
 
 
 
 const props = defineProps<{
   person: Person
+  network: {
+    facebook_id: string,
+    instagram_id: string,
+    twitter_id: string,
+
+  }
 }>();
 
 const imageLoaded = ref(false);
@@ -77,9 +84,9 @@ function  extracTitle (role:string) : string {
 </script>
 
 <template>
-    <div class="container-fluid p-0 " >
+    <div class="container-fluid" >
       <div class="wrapper d-flex mt-2 "  :style="bannerStyle" >
-        <div class="  z-0 " style="margin-top:100px">
+        <div class="info z-0 " style="margin-top:90px">
           <div
               class="img-container mt-3 z-3 p-2"
               style="width:18rem;height: 420px;overflow: hidden;"
@@ -93,6 +100,28 @@ function  extracTitle (role:string) : string {
 
             >
           </div>
+        <div class=" d-flex justify-content-between wrapper-network ">
+          <div class="social-network row">
+            <NetworkPerson class="p-0 col-md-6 "
+                           :facebook_id="props.network.facebook_id"
+                           :twitter_id="props.network.twitter_id"
+                           :instagram_id="props.network.instagram_id"/>
+
+            <div v-if="person.homepage && person.homepage.length >0"
+                 class=" home-page d-flex align-items-start col-md-6 title-place-of-homepage  "
+                 style="width: 4rem"
+            >
+              <a :href="person.homepage" target="_blank" rel="noopener">
+                <img
+                    style="width: 100%;
+                     object-fit: cover;
+                     transform: rotate(44.5deg)"
+                     src="@/assets/icons8-link-96.png" alt="logo instagram"
+                >
+              </a>
+            </div>
+          </div>
+        </div>
           <div class="all-info p-2">
             <div class="title-département d-flex flex-column align-items-start mb-2">
               <span class="fw-bold">Célebre pour</span>
@@ -110,17 +139,12 @@ function  extracTitle (role:string) : string {
               <span v-if="person.birthday && person.birthday.length > 0">{{ formatDate(person.birthday) }}</span>
               <p v-else>---</p>
             </div>
-            <div class="title-place-of-birth d-flex flex-column align-items-start">
+            <div class="title-place-of-genre d-flex flex-column align-items-start">
               <span class="fw-bold">Genre</span>
               <p v-if="person.gender">{{ person.gender }}</p>
               <p v-else>---</p>
             </div>
-            <div class="title-place-of-birth d-flex flex-column align-items-start ">
-              <span class="fw-bold">Site Web</span>
-              <a :href="person.homepage" target="_blank" rel="noopener noreferrer"
-                 v-if="person.homepage && person.homepage.length >0">{{ person.homepage }}</a>
-              <p v-else>---</p>
-            </div>
+
             <p>{{ person.deathday }}</p>
           </div>
         </div>

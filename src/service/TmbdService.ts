@@ -123,6 +123,16 @@ export const movieService = {
         }
     },
 
+    async getNetWorkPerson(id:number) {
+
+        try {
+            const response = await apiClient.get(`/persons/${id}/externalIds`);
+            return response.data;
+        } catch (error: any) {
+            console.error('Erreur:', error.response?.data || error);
+        }
+    },
+
     async  getPersonById(id: number) {
 
         try {
@@ -132,7 +142,8 @@ export const movieService = {
             console.error('Erreur:', error.response?.data || error);
             throw error;
         }
-    }
+    },
+
 
 
 }

@@ -6,9 +6,19 @@ import {Person} from "@/entities/Person";
 import {movieService} from "@/service/TmbdService";
 import PersonDetails from "@/components/PersonDetails.vue";
 
+
 const route = useRoute();
 const person = ref<Person>();
 
+const network = ref<{
+  facebook_id: string,
+  instagram_id: string,
+  twitter_id: string
+}>({
+  facebook_id: "",
+  instagram_id: "",
+  twitter_id: ""
+});
 
 
 
@@ -29,8 +39,33 @@ const LoadPerson = async () => {
   }
 }
 
+const fetchNetwork = async () => {
+
+  const personId = Number(route.params.id);
+  console.log('voici le resultat de personId:',personId);
+
+  /*if(!personId)
+  {
+    console.error('id de la personne non trouvé afin d\'afficher les liens exterieur' );
+    return;
+  }*/
+
+  try {
+
+    const response = await movieService.getNetWorkPerson(personId);
+    network.value = response;
+    console.log('voici le response de l"api:',response);
+  }catch (error) {
+
+    console.log(error);
+    throw error;
+  }
+}
+
+
 onMounted(() => {
   LoadPerson();
+  fetchNetwork();
 })
 </script>
 
@@ -40,7 +75,9 @@ onMounted(() => {
   <div class="container">
     <PersonDetails
         class="m-0 p-0"
-      v-if="person" :person = 'person'
+      v-if="person && network"
+        :person = 'person'
+        :network='network'
       />
   </div>
 

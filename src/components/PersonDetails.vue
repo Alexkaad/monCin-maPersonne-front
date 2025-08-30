@@ -152,6 +152,7 @@ function  extracTitle (role:string) : string {
         >
           <span class="fw-bold fs-5 mb-2 ">Biographie</span>
           <p class="text-start">{{ truncateBio }}</p>
+
         </div>
 
         <div v-else class="bio-only d-flex flex-column align-items-start">
@@ -165,6 +166,7 @@ function  extracTitle (role:string) : string {
         >
           {{ isExpanded ? 'Lire moins' : 'Lire la suite' }}
         </button>
+        <hr v-if="person.biography && person.biography.length >0">
       </div>
 
     </div>

@@ -8,8 +8,8 @@ import MainActors from "@/components/MainActors.vue";
 import TraillerMovie from "@/components/traillerMovie.vue";
 import {SortedTrailers, Trailer} from "@/entities/Trailer";
 import CardRecommendation from "@/components/CardRecommendation.vue";
-import {Film} from "@/entites/Film";
-import {mapCasting} from "@/entites/CastMember";
+import {Film} from "@/entities/Film";
+import {mapCasting} from "@/entities/CastMember";
 
 
 

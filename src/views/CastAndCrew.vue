@@ -4,9 +4,10 @@ import {computed, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {movieService} from "@/service/TmbdService";
 import BaniereComponent from "@/components/BaniereComponent.vue";
-import {CastMember} from "@/entites/CastMember";
-import {CrewMember} from "@/entites/CrewMember";
+import {CastMember} from "@/entities/CastMember";
+import {CrewMember} from "@/entities/CrewMember";
 import router from "@/router";
+import {Person} from "@/entities/Person";
 
 
 
@@ -183,7 +184,7 @@ const loadCastCrew = async () => {
   }
 }
 
-const navigateToPerson = ( personId : number ,event: Event) => {
+const navigateToPerson = ( personId : number , person: Person ,event: Event) => {
 
   if (event?.preventDefault) {
     event.preventDefault();
@@ -191,7 +192,7 @@ const navigateToPerson = ( personId : number ,event: Event) => {
 
   if (personId) {
     router.push({name: 'PersonSingle'
-      , params: { id: personId.toString() }});
+      , params: { id: personId.toString(), query:person.name }});
   }
 }
 

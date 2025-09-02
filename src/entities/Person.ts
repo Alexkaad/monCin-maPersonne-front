@@ -8,10 +8,10 @@ export interface Person {
     gender: number;
     adult: boolean;
     popularity: number;
-    biography: string;
     place_of_birth: string;
     birthday: string;
     deathday: string;
     homepage: string;
+    biography: string;
 
 }

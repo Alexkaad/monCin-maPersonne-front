@@ -146,5 +146,17 @@ export const movieService = {
 
 
 
+async getPersonMovieCredit(id: number) {
+        try {
+           const response =
+               await apiClient.get(`/persons/${id}/movie_credits`);
+           return response.data;
+        }catch (error: any) {
+            console.error('Erreur:', error.response?.data || error);
+            throw error;
+        }
+}
+
+
 }
 

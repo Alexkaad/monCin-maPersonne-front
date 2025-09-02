@@ -5,6 +5,9 @@ import {useBannerStyle} from "@/utils/ColorStyle";
 import {ref} from "vue";
 import {useBiogra} from "@/utils/UtilFunctionaly";
 import NetworkPerson from "@/components/NetworkPerson.vue";
+import KnownForPerson from "@/components/KnownForPerson.vue";
+import {useColorStore} from "@/store/ColorStore";
+import {KnownFor} from "@/entities/knownFor";
 
 
 
@@ -15,17 +18,25 @@ const props = defineProps<{
     instagram_id: string,
     twitter_id: string,
   }
-
+  filmsConnus: KnownFor
   homepage: string,
+
 }>();
 
 const imageLoaded = ref(false);
-
+const posterLoad = ref(false);
 
 
 const {truncateBio,isExpanded,toggleExpanded} = useBiogra(ref(props.person.biography), 300);
 
 const bannerStyle = useBannerStyle(imageLoaded);
+const colorStore = useColorStore();
+
+const handlePosterLoad = () => {
+  posterLoad.value = true;
+  const imageUrl = `https://image.tmdb.org/t/p/w500${props.person.profile_path}`;
+  colorStore.extractDominantColor(imageUrl);
+};
 
 const formatDate = (date: Date | string) => {
   return new Date(date).toLocaleDateString('fr-FR')
@@ -95,7 +106,7 @@ function  extracTitle (role:string) : string {
           <img :src="person.profile_path ?'https://image.tmdb.org/t/p/w500'
             + person.profile_path :require('@/assets/OIP.jpg')"
                class="img-person  " alt="titre-image m-0 p-0"
-               @load="imageLoaded = true"
+               @load="handlePosterLoad"
                @error="imageLoaded = false"
                style="object-fit: cover; width: 100%; height: 100%; border-radius: 10px 10px 10px 10px;"
 
@@ -106,7 +117,7 @@ function  extracTitle (role:string) : string {
                          :facebook_id="props.network.facebook_id"
                          :twitter_id="props.network.twitter_id"
                          :instagram_id="props.network.instagram_id"
-                         :homepage="props.homepage"
+                         :homepage="props.person.homepage"
           />
         </div>
         <div class="all-info p-2">
@@ -148,25 +159,29 @@ function  extracTitle (role:string) : string {
         </div>
 
         <div v-if="person.biography && person.biography.length > 0"
-             class="bio-only d-flex flex-column align-items-start"
-        >
+             class="bio-only d-flex flex-column align-items-start">
           <span class="fw-bold fs-5 mb-2 ">Biographie</span>
-          <p class="text-start">{{ truncateBio }}</p>
+          <p class="text-start">
+            {{ truncateBio }}
+            <span v-if=" person.biography && person.biography.length > 300" @click="toggleExpanded"
+
+                  style="width: 7rem; color: #007bff; cursor: pointer;"
+            >
+          {{ isExpanded ? 'Lire moins' : 'Lire la suite' }}
+        </span>
+          </p>
 
         </div>
 
-        <div v-else class="bio-only d-flex flex-column align-items-start">
+        <div v-else class="bio-only  align-items-start">
           <span class="fw-bold fs-5 ">Biographie</span>
           <p>Aucune biographie disponible</p>
         </div>
 
-        <button v-if=" person.biography && person.biography.length > 300" @click="toggleExpanded"
-                class="btn btn-outline-warning mt-2"
-                style="width: 7rem"
-        >
-          {{ isExpanded ? 'Lire moins' : 'Lire la suite' }}
-        </button>
+
         <hr v-if="person.biography && person.biography.length >0">
+
+        <knownForPerson :filmsConnus="filmsConnus"/>
       </div>
 
     </div>
@@ -175,5 +190,18 @@ function  extracTitle (role:string) : string {
 </template>
 
 <style scoped>
+
+
+
+.bio-only p {
+  max-width: 900px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.bio-only p.expanded {
+  max-height: none; /* retire la limite */
+}
+
 
 </style>

@@ -10,7 +10,9 @@ export interface CrewMember {
     profile_path: string | null;
     credit_id: string;
     department: string;
-    job: string
+    job: string,
+    backdrop_path?: string | null;
+    title?: string;
 }
 
 

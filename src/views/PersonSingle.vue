@@ -5,11 +5,21 @@ import {onMounted, ref} from "vue";
 import {Person} from "@/entities/Person";
 import {movieService} from "@/service/TmbdService";
 import PersonDetails from "@/components/PersonDetails.vue";
+import {Biography} from "@/entities/Biography";
+
+import {KnownFor} from "@/entities/knownFor";
+import {CastMember} from "@/entities/CastMember";
+import {CrewMember} from "@/entities/CrewMember";
 
 
 const route = useRoute();
 const person = ref<Person>();
+const biography = ref<Biography>();
+const filmsConnus = ref<KnownFor>({
 
+  castMember : [] as CastMember[],
+  crewMember : [] as CrewMember[]
+});
 const network = ref<{
   facebook_id: string,
   instagram_id: string,
@@ -19,6 +29,7 @@ const network = ref<{
   instagram_id: "",
   twitter_id: ""
 });
+
 
 
 
@@ -44,11 +55,11 @@ const fetchNetwork = async () => {
   const personId = Number(route.params.id);
   console.log('voici le resultat de personId:',personId);
 
-  /*if(!personId)
+  if(!personId)
   {
     console.error('id de la personne non trouvé afin d\'afficher les liens exterieur' );
     return;
-  }*/
+  }
 
   try {
 
@@ -62,28 +73,62 @@ const fetchNetwork = async () => {
   }
 }
 
+ const fetchPersonKnownFor = async () => {
+   const personId = Number(route.params.id);
+
+  console.log('voici le resultat de name:',name);
+
+  try {
+
+    const response = await movieService.getPersonMovieCredit(personId);
+    console.log('voici le response de l"api:',response);
+    const cast : CastMember [] = response.cast || [];
+    const crew : CrewMember [] = response.crew || [];
+    filmsConnus.value = {
+
+      castMember : cast,
+      crewMember : crew
+    }
+    console.log('voici la liste des films celebre de la personne:', filmsConnus.value);
+
+  }catch (error) {
+    console.log(error);
+    throw error;
+  }
+ }
+
+
 
 onMounted(() => {
   LoadPerson();
   fetchNetwork();
+  fetchPersonKnownFor();
+
 })
 </script>
 
 <template>
 
 
-  <div class="container">
+  <div class="container-md " style="width: 100%; height: 100%;">
     <PersonDetails
         class="m-0 p-0"
       v-if="person && network"
         :person = 'person'
         :network='network'
         :homepage='person.homepage'
+        :biography ="biography"
+        :filmsConnus="filmsConnus"
+        :person-name="person.name"
       />
+
   </div>
+
 
 </template>
 
 <style scoped>
+
+
 
 </style>

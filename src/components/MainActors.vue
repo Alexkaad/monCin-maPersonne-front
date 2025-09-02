@@ -34,7 +34,7 @@ const navigateToCastAndCrew = (event: Event) => {
   router.push({ name: 'Cast&Crew' });
 };
 
-const navigateToPerson = ( personId : number ,event: Event) => {
+const navigateToPerson = ( personId : number,actorName:string , page =1,event: Event) => {
 
   if (event?.preventDefault) {
     event.preventDefault();
@@ -42,7 +42,10 @@ const navigateToPerson = ( personId : number ,event: Event) => {
 
   if (personId) {
     router.push({name: 'PersonSingle'
-    , params: { id: personId.toString() }});
+    , params: { id: personId.toString() ,}
+    , query: { name : actorName.toString() ,page:page.toString() }});
+
+
   }
 }
 
@@ -60,7 +63,8 @@ const navigateToPerson = ( personId : number ,event: Event) => {
 
       <div class="container main-actors-style-1 "  >
         <!-- Utilisez mainCast au lieu de cast -->
-        <div v-for="actor in mainCast" :key="actor.id" class="card border-1 border-emphasis card-fixed-size" @click="navigateToPerson(actor.id,$event)">
+        <div v-for="actor in mainCast" :key="actor.id" class="card border-1 border-emphasis card-fixed-size"
+             @click="navigateToPerson(actor.id,actor.name,1,$event)">
           <div class="img-container position-relative">
             <div v-if="!imageLoaded" class="skeleton-loader"></div>
             <img :src="actor.poster_path || '@/assets/OIP.jpg'"

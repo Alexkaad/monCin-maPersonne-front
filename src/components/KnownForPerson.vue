@@ -7,7 +7,7 @@ import {KnownFor} from "@/entities/knownFor";
 
 const props = defineProps<{
 
-  filmsConnus ?: KnownFor;
+  filmsConnus?: KnownFor;
 
 }>();
 
@@ -33,7 +33,7 @@ const formatTitle = (title: string | undefined, limit = 24) => {
 }
 
 
-const navigateToDetail = ( id : number, event?: Event) => {
+const navigateToDetail = (id: number, event?: Event) => {
   if (event?.preventDefault) {
     event.preventDefault();
   }
@@ -41,7 +41,7 @@ const navigateToDetail = ( id : number, event?: Event) => {
   if (id) {
     router.push({
       name: 'FilmSingle',
-     params: { id: id.toString() },
+      params: {id: id.toString()},
     });
   }
 };
@@ -52,10 +52,11 @@ const navigateToDetail = ( id : number, event?: Event) => {
        class="container recommendation-list">
     <h5
         class="recommendation-title d-flex fw-bold"
-        style="align-items: flex-start; font-family: 'Bahnschrift' , sans-serif;">Célèbre pour
+        style="align-items: flex-start; font-family: 'Bahnschrift' , sans-serif;">
+      Célèbre pour
     </h5>
-    <div class="recommendations-scroll" >
-      <div  class="recommendations-row ">
+    <div class="recommendations-scroll">
+      <div class="recommendations-row ">
         <div v-for="filmItem in safeCastMember"
              :key="filmItem.id"
              class="recommendation-card"
@@ -66,20 +67,22 @@ const navigateToDetail = ( id : number, event?: Event) => {
                 class="img-container position-relative"
                 @click="navigateToDetail(filmItem.id, $event)"
             >
-              <div v-if="!imageLoaded[filmItem.id]" class="skeleton-loader"></div>
+              <div v-if="!imageLoaded[filmItem.id]"
+                   class="skeleton-loader"></div>
               <img
                   :src=" filmItem.backdrop_path ? 'https://image.tmdb.org/t/p/w500' + filmItem.backdrop_path : fallBack "
-                   @error="($event.target as HTMLImageElement).src = fallBack"
-                   @load="handleImageLoad(filmItem.id)"
-                   class="card-img-top"
-                   :alt="filmItem.title"
+                  @error="($event.target as HTMLImageElement).src = fallBack"
+                  @load="handleImageLoad(filmItem.id)"
+                  class="card-img-top"
+                  :alt="filmItem.title"
               >
             </div>
           </div>
           <div class="card-body d-flex flex-column">
             <h6
                 class="card-title-bottom fw-bold"
-                style="color:#374558;font-size: 0.85rem;align-items: center">{{formatTitle(filmItem.title)}}
+                style="color:#374558;font-size: 0.85rem;align-items: center">
+              {{ formatTitle(filmItem.title) }}
             </h6>
           </div>
         </div>
@@ -92,7 +95,7 @@ const navigateToDetail = ( id : number, event?: Event) => {
 
 .recommendation-list {
   margin: 1rem auto;
-  padding: 0 ;
+  padding: 0;
   overflow-x: hidden;
   max-width: 100%;
 }
@@ -108,7 +111,7 @@ const navigateToDetail = ( id : number, event?: Event) => {
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  padding: 0.5rem  0;
+  padding: 0.5rem 0;
   width: 100%;
   white-space: nowrap;
 }
@@ -174,7 +177,10 @@ const navigateToDetail = ( id : number, event?: Event) => {
 
 }
 
-.card-title-bottom { white-space: pre-line; text-align: left; }
+.card-title-bottom {
+  white-space: pre-line;
+  text-align: left;
+}
 
 .skeleton-loader {
   position: absolute;

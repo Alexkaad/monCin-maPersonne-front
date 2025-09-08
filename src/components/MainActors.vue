@@ -4,7 +4,6 @@ import {computed, ref} from "vue";
 import router from "@/router";
 
 
-
 const props = defineProps<{
   cast: Array<{
     id: number,
@@ -16,7 +15,6 @@ const props = defineProps<{
 }>();
 
 
-
 const imageLoaded = ref<boolean>(false)
 
 const handleImageLoad = () => {
@@ -24,72 +22,76 @@ const handleImageLoad = () => {
 }
 
 
-const mainCast= computed (() => {
+const mainCast = computed(() => {
 
-   return props.cast.slice(0, 8);
- })
+  return props.cast.slice(0, 8);
+})
 
 const navigateToCastAndCrew = (event: Event) => {
   event.preventDefault();
-  router.push({ name: 'Cast&Crew' });
+  router.push({name: 'Cast&Crew'});
 };
 
-const navigateToPerson = ( personId : number,actorName:string , page =1,event: Event) => {
+const navigateToPerson = (personId: number, actorName: string, page = 1, event: Event) => {
 
   if (event?.preventDefault) {
     event.preventDefault();
   }
 
   if (personId) {
-    router.push({name: 'PersonSingle'
-    , params: { id: personId.toString() ,}
-    , query: { name : actorName.toString() ,page:page.toString() }});
+    router.push({
+      name: 'PersonSingle'
+      , params: {id: personId.toString(),}
+      , query: {name: actorName.toString(), page: page.toString()}
+    });
 
 
   }
 }
 
 
-
-
 </script>
 
 <template>
-  <div class="carrousel-main-actors mt-1 d-flex flex-column align-items-center" style="height: auto">
+  <div class="carrousel-main-actors mt-1 d-flex flex-column align-items-center"
+       style="height: auto">
     <div class="container title-of-mainActor">
       <h5 class=" title-actor fw-bolder ">Têtes d'affiche</h5>
     </div>
 
 
-      <div class="container main-actors-style-1 "  >
-        <!-- Utilisez mainCast au lieu de cast -->
-        <div v-for="actor in mainCast" :key="actor.id" class="card border-1 border-emphasis card-fixed-size"
-             @click="navigateToPerson(actor.id,actor.name,1,$event)">
-          <div class="img-container position-relative">
-            <div v-if="!imageLoaded" class="skeleton-loader"></div>
-            <img :src="actor.poster_path || '@/assets/OIP.jpg'"
-                 @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
-                 class="card-img-top"
-                 alt="titre-image"
-                 @load="handleImageLoad"
+    <div class="container main-actors-style-1 ">
+      <!-- Utilisez mainCast au lieu de cast -->
+      <div v-for="actor in mainCast" :key="actor.id"
+           class="card border-1 border-emphasis card-fixed-size"
+           @click="navigateToPerson(actor.id,actor.name,1,$event)">
+        <div class="img-container position-relative">
+          <div v-if="!imageLoaded" class="skeleton-loader"></div>
+          <img :src="actor.poster_path || '@/assets/OIP.jpg'"
+               @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
+               class="card-img-top"
+               alt="titre-image"
+               @load="handleImageLoad"
 
-            >
-          </div>
-          <div class="card-body d-flex flex-column">
-            <h6 class="card-title-bottom fw-bold" style="color:#4f3244;">
-              {{ actor.name }}
-            </h6>
-            <span class="card-title-bottom release_date fw-bold m-0"
-                  style="font-family:Helvetica, sans-serif; color: #374558">
+          >
+        </div>
+        <div class="card-body d-flex flex-column">
+          <h6 class="card-title-bottom fw-bold" style="color:#4f3244;">
+            {{ actor.name }}
+          </h6>
+          <span class="card-title-bottom release_date fw-bold m-0"
+                style="font-family:Helvetica, sans-serif; color: #374558">
             {{ actor.character }}
           </span>
-          </div>
         </div>
       </div>
+    </div>
 
     <div class="container show-list mt-4 ">
-      <div class="lien-wrapper d-flex justify-content-start p-1" style="width: 100%;">
-      <span class="fw-bold lien-cliclable " @click="navigateToCastAndCrew($event)">
+      <div class="lien-wrapper d-flex justify-content-start p-1"
+           style="width: 100%;">
+      <span class="fw-bold lien-cliclable "
+            @click="navigateToCastAndCrew($event)">
         Voir la liste complete des distributions des rôles et equipe technique
       </span>
       </div>
@@ -102,12 +104,10 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
 <style scoped>
 
 
-
 .card-fixed-size:hover {
   transform: scale(1.05);
   cursor: pointer;
 }
-
 
 
 .lien-cliclable {
@@ -127,10 +127,11 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
   height: 100%;
   object-fit: cover;
 }
+
 .main-actors-style-1 {
   display: grid !important;
   grid-template-columns: repeat(8, 1fr) !important;
-  gap: 10px 1px!important;
+  gap: 10px 1px !important;
   padding: 0 !important;
   margin: 0 !important;
   width: 100% !important;
@@ -146,7 +147,7 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
 }
 
 .img-container {
-  height: 170px !important;   /* Réduit la hauteur de l'image */
+  height: 170px !important; /* Réduit la hauteur de l'image */
   width: 100% !important;
 }
 
@@ -169,11 +170,10 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
 }
 
 
-
 .title-of-mainActor {
   display: flex;
   justify-content: start;
-  padding:0;
+  padding: 0;
   margin-bottom: 15px;
 }
 
@@ -189,7 +189,6 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
 }
 
 
-
 @keyframes loading {
   0% {
     background-position: 200% 0;
@@ -198,7 +197,8 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
     background-position: -200% 0;
   }
 }
-@media (min-width: 768px) and (max-width: 992px){
+
+@media (min-width: 768px) and (max-width: 992px) {
   .main-actors-style-1 {
     display: grid;
     margin: 0 !important;
@@ -216,11 +216,11 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
     height: 150px !important;
   }
 
-  .show-list{
+  .show-list {
 
-  padding:0 !important;
-  margin: 0 !important;
-}
+    padding: 0 !important;
+    margin: 0 !important;
+  }
 
 
   .lien-wrapper {
@@ -238,25 +238,25 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
   }
 
 
-  .title-actor{
+  .title-actor {
 
-   font-weight: bold;
-   margin:0;
+    font-weight: bold;
+    margin: 0;
 
-   .title-of-mainActor{
+    .title-of-mainActor {
 
-     margin: 0;
-     padding-right: 160px;
-     justify-content: space-around;
-   }
-
-
-  }
+      margin: 0;
+      padding-right: 160px;
+      justify-content: space-around;
+    }
 
 
   }
 
-@media screen and (min-width: 320px) and (max-width: 475px){
+
+}
+
+@media screen and (min-width: 320px) and (max-width: 475px) {
 
   .main-actors-style-1 {
     display: grid;
@@ -267,10 +267,11 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
   }
 
 
-  .skeleton-loader{
+  .skeleton-loader {
 
     padding-top: 5px;
   }
+
   .card-fixed-size {
     width: 72px !important;
     height: 160px !important;
@@ -280,9 +281,9 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
     height: 120px !important;
   }
 
-  .show-list{
+  .show-list {
 
-    padding:0 !important;
+    padding: 0 !important;
     margin: 0 !important;
   }
 
@@ -294,7 +295,7 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
 
   .lien-cliclable {
     display: block !important;
-    white-space: normal!important;
+    white-space: normal !important;
     word-wrap: break-word !important;
     line-height: 1;
     font-size: 0.63rem !important;
@@ -317,7 +318,6 @@ const navigateToPerson = ( personId : number,actorName:string , page =1,event: E
 
   }
 }
-
 
 
 </style>

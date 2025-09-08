@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import {useRouter} from "vue-router";
+import {onMounted, ref} from "vue";
 
 
 
@@ -56,14 +57,36 @@ const goToNowPlaying = async (event : Event) => {
   }
 }
 
+const showHeader = ref(true);
+let lastScroll = 0;
 
+const handleScroll = () => {
+  const currentScroll = window.scrollY;
+
+  if (currentScroll > lastScroll) {
+    // on descend → cacher
+    showHeader.value = false;
+  } else {
+    // on remonte → afficher
+    showHeader.value = true;
+  }
+
+  lastScroll = currentScroll <= 0 ? 0 : currentScroll; // éviter scroll négatif
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
 
 </script>
 
 <template>
 
-  <nav class="navbar  m-0 ">
-    <div class="container d-flex align-items-center p-1">
+  <nav
+      :style="{ transform: showHeader ? 'translateY(0)' : 'translateY(-100%)' }"
+      class="m-0 navbar fixed-top navbar-expand-lg bg-white shadow transition-header "
+  >
+    <div class="container d-flex align-items-center p-1 ">
       <!-- Logo group -->
       <div class ="logo-group d-flex justify-content-between" style="width: 28%">
       <div class="logo-group">
@@ -121,8 +144,6 @@ const goToNowPlaying = async (event : Event) => {
 .navbar {
   height: 70px;
   width: 100%;
-  z-index: 1000;
-  position: fixed;
   top: 0;
   left: 0;
   background: linear-gradient(
@@ -132,6 +153,7 @@ const goToNowPlaying = async (event : Event) => {
   );
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: visible !important;
 }
 
 .dropdown-toggle::after {
@@ -148,7 +170,10 @@ const goToNowPlaying = async (event : Event) => {
   gap: 0.5rem;
 }
 
+.navbar:hover {
 
+  overflow-y: scroll;
+}
 
 .dropdown-item {
   cursor: pointer;

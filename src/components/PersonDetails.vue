@@ -40,7 +40,17 @@ const handlePosterLoad = () => {
 };
 
 const formatDate = (date: Date | string) => {
-  return new Date(date).toLocaleDateString('fr-FR')
+  return new Date(date).toLocaleDateString('fr-FR').replace(/\//g, '-');
+}
+
+const formatTitle = (title: string | undefined, limit = 24) => {
+
+  if (!title) {
+
+    return '';
+  }
+  return title.length > limit ? title.substring(0, limit) + '...' : title;
+
 }
 
 function  extracTitle (role:string) : string {

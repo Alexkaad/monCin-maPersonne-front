@@ -15,6 +15,7 @@ export interface CastMember {
     role: string,
     backdrop_path?: string | null,
     title?: string,
+    release_date?: string,
 }
 
 export interface Casting {

@@ -8,6 +8,7 @@ import NetworkPerson from "@/components/NetworkPerson.vue";
 import KnownForPerson from "@/components/KnownForPerson.vue";
 import {useColorStore} from "@/store/ColorStore";
 import {KnownFor} from "@/entities/knownFor";
+import ListCastAndCrew from "@/components/ListCastAndCrew.vue";
 
 
 
@@ -96,11 +97,11 @@ function  extracTitle (role:string) : string {
 </script>
 
 <template>
-  <div class="container-fluid">
-    <div class="wrapper d-flex mt-2 " :style="bannerStyle">
-      <div class="info z-0 " style="margin-top:90px">
+  <div class="container" >
+    <div class="wrapper row " :style="bannerStyle">
+      <div class="info z-0 col-3" style="margin-top:90px">
         <div
-            class="img-container mt-3 z-3 p-2"
+            class="img-container mt-3 z-3 p-1"
             style="width:18rem;height: 420px;overflow: hidden;"
         >
           <img :src="person.profile_path ?'https://image.tmdb.org/t/p/w500'
@@ -149,7 +150,7 @@ function  extracTitle (role:string) : string {
           </div>
         </div>
       </div>
-      <div class="bio-name p-5" style="margin-top:78px">
+      <div class="bio-name p-4 col-9" style="margin-top:87px">
         <div class="name-actor d-flex align-items-start mb-2">
           <h2 class="fw-bold"
               :style="bannerStyle"
@@ -173,15 +174,16 @@ function  extracTitle (role:string) : string {
 
         </div>
 
-        <div v-else class="bio-only  align-items-start">
+        <div v-else class="bio-only d-flex flex-column align-items-start">
           <span class="fw-bold fs-5 ">Biographie</span>
           <p>Aucune biographie disponible</p>
         </div>
 
-
         <hr v-if="person.biography && person.biography.length >0">
 
         <knownForPerson :filmsConnus="filmsConnus"/>
+
+        <ListCastAndCrew :perform="filmsConnus"/>
       </div>
 
     </div>

@@ -110,9 +110,10 @@ onMounted(() => {
 <template>
 
 
-  <div class="container-md " style="width: 100%; height: 100%;">
+  <div class="container" style="min-height: 100vh"
+  >
     <PersonDetails
-        class="m-0 p-0"
+        class=" container m-0 p-0"
       v-if="person && network"
         :person = 'person'
         :network='network'
@@ -120,6 +121,7 @@ onMounted(() => {
         :biography ="biography"
         :filmsConnus="filmsConnus"
         :person-name="person.name"
+        :perfomm = "filmsConnus.castMember"
       />
 
   </div>

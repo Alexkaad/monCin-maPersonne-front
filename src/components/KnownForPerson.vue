@@ -15,11 +15,23 @@ const props = defineProps<{
 const imageLoaded = ref<{ [key: number]: boolean }>({});
 
 // Assurer que castMember est toujours un tableau
-const safeCastMember = computed(() => props.filmsConnus?.castMember || []);
+const safeCastMember = computed(() => props.filmsConnus?.castMember.slice(0, 8) || []);
 
 const handleImageLoad = (filmId: number) => {
   imageLoaded.value[filmId] = true;
 };
+
+// corrige aussi la typo: formatTitle (pas Tilte)
+const formatTitle = (title: string | undefined, limit = 24) => {
+
+  if (!title) {
+
+    return '';
+  }
+  return title.length > limit ? title.substring(0, limit) + '...' : title;
+
+}
+
 
 const navigateToDetail = ( id : number, event?: Event) => {
   if (event?.preventDefault) {
@@ -36,17 +48,18 @@ const navigateToDetail = ( id : number, event?: Event) => {
 </script>
 
 <template>
-  <div class="container recommendation-list">
+  <div v-if="filmsConnus?.castMember && filmsConnus.castMember.length >0"
+       class="container recommendation-list">
     <h5
         class="recommendation-title d-flex fw-bold"
         style="align-items: flex-start; font-family: 'Bahnschrift' , sans-serif;">Célèbre pour
     </h5>
-    <div class="recommendations-scroll">
-      <div  class="recommendations-row">
+    <div class="recommendations-scroll" >
+      <div  class="recommendations-row ">
         <div v-for="filmItem in safeCastMember"
              :key="filmItem.id"
-             class="recommendation-card">
-
+             class="recommendation-card"
+        >
           <div class="card border-1 border-emphasis card-fixed-size">
 
             <div
@@ -64,7 +77,10 @@ const navigateToDetail = ( id : number, event?: Event) => {
             </div>
           </div>
           <div class="card-body d-flex flex-column">
-            <h6 class="card-title-bottom fw-bold" style="color:#374558;font-size: 0.85rem">{{ filmItem.title }}</h6>
+            <h6
+                class="card-title-bottom fw-bold"
+                style="color:#374558;font-size: 0.85rem;align-items: center">{{formatTitle(filmItem.title)}}
+            </h6>
           </div>
         </div>
       </div>
@@ -76,11 +92,13 @@ const navigateToDetail = ( id : number, event?: Event) => {
 
 .recommendation-list {
   margin: 1rem auto;
-  padding: 0 15px;
+  padding: 0 ;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
+
 .recommendation-title {
-  margin-bottom: 1.5rem;
   font-size: 1.3rem;
   font-weight: 600;
   color: #374558;
@@ -90,8 +108,7 @@ const navigateToDetail = ( id : number, event?: Event) => {
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  padding: 1rem ;
-  margin: 0 -1rem;
+  padding: 0.5rem  0;
   width: 100%;
   white-space: nowrap;
 }
@@ -128,8 +145,7 @@ const navigateToDetail = ( id : number, event?: Event) => {
 }
 
 .card-fixed-size {
-  width: 14rem;
-  height: 140px;
+  width: 11rem;
   border-radius: 10px;
   transition: transform 0.3s ease;
 }
@@ -140,7 +156,7 @@ const navigateToDetail = ( id : number, event?: Event) => {
 }
 
 .img-container {
-  height: 300px;
+  height: 150px;
   overflow: hidden;
   cursor: pointer;
   border-radius: 10px 10px 10px 10px;
@@ -153,10 +169,12 @@ const navigateToDetail = ( id : number, event?: Event) => {
 }
 
 .card-body {
-  height: 30px;
+  height: auto;
   padding: 0.5rem 0.75rem;
 
 }
+
+.card-title-bottom { white-space: pre-line; text-align: left; }
 
 .skeleton-loader {
   position: absolute;
@@ -177,4 +195,5 @@ const navigateToDetail = ( id : number, event?: Event) => {
     background-position: -200% 0;
   }
 }
+
 </style>

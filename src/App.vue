@@ -35,4 +35,9 @@ nav a {
 nav a.router-link-active {
   color: #42b983;
 }
+
+html, body, #app {
+  overflow-x: hidden;
+}
+
 </style>

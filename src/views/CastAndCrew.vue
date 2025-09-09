@@ -7,8 +7,6 @@ import BaniereComponent from "@/components/BaniereComponent.vue";
 import {CastMember} from "@/entities/CastMember";
 import {CrewMember} from "@/entities/CrewMember";
 import router from "@/router";
-import {Person} from "@/entities/Person";
-
 
 const route = useRoute();
 
@@ -180,7 +178,7 @@ const loadCastCrew = async () => {
   }
 }
 
-const navigateToPerson = (personId: number, person: Person, event: Event) => {
+const navigateToPerson = (personId: number, personName: string, event: Event) => {
 
   if (event?.preventDefault) {
     event.preventDefault();
@@ -189,7 +187,7 @@ const navigateToPerson = (personId: number, person: Person, event: Event) => {
   if (personId) {
     router.push({
       name: 'PersonSingle'
-      , params: {id: personId.toString(), query: person.name}
+      , params: {id: personId.toString(), query: personName}
     });
   }
 }
@@ -249,7 +247,7 @@ onMounted(() => {
                 <div
                     v-for="member in cast " :key="member.id"
                     class="card mt-2"
-                    @click="navigateToPerson(member.id,$event)"
+                    @click="navigateToPerson(member.id,member.name ,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${ member.profile_path}`|| '@/assets/OIP.jpg'"
@@ -296,7 +294,8 @@ onMounted(() => {
               <div class="card-container ">
                 <div
                     v-for="crew in crewByDepartment.Art" :key="crew.id"
-                    class="card " @click="navigateToPerson(crew.id,$event)"
+                    class="card "
+                    @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
@@ -332,7 +331,8 @@ onMounted(() => {
               <div class="card-container ">
                 <div
                     v-for="crew in crewByDepartment.Camera" :key="crew.id"
-                    class="card mt-2" @click="navigateToPerson(crew.id,$event)"
+                    class="card mt-2"
+                    @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
@@ -370,7 +370,7 @@ onMounted(() => {
               <div class="card-container ">
                 <div v-for="crew in groupedMakeUp" :key="crew.id"
                      class="card mt-2"
-                     @click="navigateToPerson(crew.id,$event)"
+                     @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
@@ -410,7 +410,7 @@ onMounted(() => {
                 <div
                     v-for="crew in crewByDepartment.Crew" :key="crew.id"
                     class="card mt-2"
-                    @click="navigateToPerson(crew.id,$event)"
+                    @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
@@ -447,7 +447,7 @@ onMounted(() => {
                 <div
                     v-for="crew in crewByDepartment.Directing" :key="crew.id"
                     class="card mt-2"
-                    @click="navigateToPerson(crew.id,$event)"
+                    @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
@@ -483,7 +483,7 @@ onMounted(() => {
               <div class="card-container ">
                 <div v-for="crew in crewByDepartment.Editing" :key="crew.id"
                      class="card mt-2"
-                     @click="navigateToPerson(crew.id,$event)"
+                     @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
@@ -518,7 +518,7 @@ onMounted(() => {
               <div class="card-container ">
                 <div v-for="crew in crewByDepartment.Lighting" :key="crew.id"
                      class="card mt-2"
-                     @click="navigateToPerson(crew.id,$event)"
+                     @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
@@ -556,7 +556,7 @@ onMounted(() => {
                     v-for="crew in crewByDepartment.Production"
                     :key="crew.id"
                     class="card mt-2"
-                    @click="navigateToPerson(crew.id,$event)"
+                    @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
@@ -592,7 +592,7 @@ onMounted(() => {
                 <div
                     v-for="crew in groupedSound" :key="crew.id"
                     class="card mt-2"
-                    @click="navigateToPerson(crew.id,$event)"
+                    @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
@@ -634,7 +634,7 @@ onMounted(() => {
                 <div
                     v-for="crew in groupedEffectVisuels" :key="crew.id"
                     class="card mt-2"
-                    @click="navigateToPerson(crew.id,$event)"
+                    @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"
@@ -675,7 +675,7 @@ onMounted(() => {
               <div class="card-container">
                 <div v-for="crew in groupedWriting" :key="crew.id"
                      class="card mt-2"
-                     @click="navigateToPerson(crew.id,$event)"
+                     @click="navigateToPerson(crew.id,crew.name,$event)"
                 >
                   <img
                       :src="`https://image.tmdb.org/t/p/w500${crew.profile_path}` || '@/assets/OIP.jpg'"

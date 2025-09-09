@@ -3,6 +3,6 @@ import {CrewMember} from "@/entities/CrewMember";
 
 export interface Credit {
 
-    cast : CastMember[],
-    crew : CrewMember[]
+    cast : CastMember,
+    crew : CrewMember
 }

@@ -46,15 +46,24 @@ const navigateToDetail = (id: number, event?: Event) => {
   <table class="table border border-2 table-striped table-hover">
     <thead>
     <tr class="table-light">
-      <th scope="col" colspan="2" style="background-color: burlywood; ">
+      <th scope="col" colspan="2" style="background-color: #6c757d">
         <div
             class="fw-semibold d-flex justify-content-between align-items-center"
-            style="cursor:pointer; padding: 0 10px 0 20px; "
+            style=" padding: 0 10px 0 20px; "
             @click="toggle"
 
         >
-          <span>Interpretation</span>
-          <span class="arrow" :class="{ rotated: isExpanded }">▶</span>
+          <span class="text-black">Interpretation</span>
+          <div
+              class="custom-arrow d-flex  p-1 border border-2 border-black rounded-circle"
+              style="width: 1.9rem; ">
+          <span class="arrow align-items-center bi-arrows-collapse fw-bold"
+                style="width: 1.9rem"
+                :class="{
+            rotated:
+          isExpanded }">
+          </span>
+          </div>
         </div>
       </th>
     </tr>
@@ -85,11 +94,21 @@ const navigateToDetail = (id: number, event?: Event) => {
 
 <style scoped>
 .arrow {
-  display: inline-block;
+
   transition: transform 0.3s ease;
+  cursor: pointer;
+
 }
 
 .rotated {
   transform: rotate(90deg);
+
+}
+
+.custom-arrow:hover{
+
+  transition: 0.3s ease;
+  transform: scale(1.1);
+
 }
 </style>

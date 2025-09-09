@@ -67,15 +67,17 @@ const navigateToDetail = (id: number, event?: Event) => {
                 class="img-container position-relative"
                 @click="navigateToDetail(filmItem.id, $event)"
             >
-              <div v-if="!imageLoaded[filmItem.id]"
-                   class="skeleton-loader"></div>
+              <div v-if="!imageLoaded[filmItem.id]" class="skeleton-loader"></div>
               <img
-                  :src=" filmItem.backdrop_path ? 'https://image.tmdb.org/t/p/w500' + filmItem.backdrop_path : fallBack "
+                  :src=" filmItem.backdrop_path ? 'https://image.tmdb.org/t/p/w500' +
+                   filmItem.backdrop_path : 'https://image.tmdb.org/t/p/w500'
+                    + filmItem.poster_path || fallBack "
                   @error="($event.target as HTMLImageElement).src = fallBack"
                   @load="handleImageLoad(filmItem.id)"
                   class="card-img-top"
                   :alt="filmItem.title"
               >
+
             </div>
           </div>
           <div class="card-body d-flex flex-column">

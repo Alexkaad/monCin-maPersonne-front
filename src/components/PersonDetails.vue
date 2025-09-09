@@ -107,7 +107,7 @@ function  extracTitle (role:string) : string {
 </script>
 
 <template>
-  <div class="container" >
+  <div class="container all" >
     <div class="wrapper row " :style="bannerStyle">
       <div class="info z-0 col-3" style="margin-top:90px">
         <div
@@ -215,5 +215,36 @@ function  extracTitle (role:string) : string {
   max-height: none; /* retire la limite */
 }
 
+@media (max-width: 768px) {
 
+  .wrapper {
+    flex-direction: column;
+    margin-top: 70px!important;
+  }
+
+  .info {
+    margin-top: 0!important;
+  }
+  .bio-name {
+
+    margin-top: 0px!important;
+    padding-top: 0  ! important;
+  }
+
+  .all-info span{
+
+    width: 7rem;
+    padding: 0 ! important;
+    margin-left: 0 ! important;
+
+  }
+
+  .all-info{
+
+   padding: 0 4px 0 0 ! important;
+  }
+
+
+
+}
 </style>

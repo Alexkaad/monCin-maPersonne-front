@@ -8,7 +8,16 @@ import NetworkPerson from "@/components/NetworkPerson.vue";
 import KnownForPerson from "@/components/KnownForPerson.vue";
 import {useColorStore} from "@/store/ColorStore";
 import {KnownFor} from "@/entities/knownFor";
-import ListCastAndCrew from "@/components/ListCastAndCrew.vue";
+import ListCast from "@/components/ListCast.vue";
+import ListCrewProducer from "@/components/ListCrewProducer.vue";
+import ListCrewWriting from "@/components/ListCrewWriting.vue";
+import ListCrewArt from "@/components/ListCrewArt.vue";
+import ListCrewDirecting from "@/components/ListCrewDirecting.vue";
+import ListCrewEditor from "@/components/ListCrewEditor.vue";
+import ListCrewCamera from "@/components/ListCrewCamera.vue";
+import ListCrewEquiTech from "@/components/ListCrewEquiTech.vue";
+import ListCrewSound from "@/components/ListCrewSound.vue";
+import {CastMember} from "@/entities/CastMember";
 
 
 
@@ -42,6 +51,18 @@ const handlePosterLoad = () => {
 const formatDate = (date: Date | string) => {
   return new Date(date).toLocaleDateString('fr-FR').replace(/\//g, '-');
 }
+
+const sortByDateCastAndCrew = (castMember: CastMember[]): void => {
+  castMember.sort((a, b) => {
+    if (!a.release_date) return 1;
+    if (!b.release_date) return -1;
+
+    const dateA = new Date(a.release_date).getTime();
+    const dateB = new Date(b.release_date).getTime();
+
+    return dateB - dateA; // du + récent au + ancien
+  });
+};
 
 const formatTitle = (title: string | undefined, limit = 24) => {
 
@@ -111,7 +132,16 @@ function  extracTitle (role:string) : string {
     <div class="wrapper row " :style="bannerStyle">
       <div class="info z-0 col-3" style="margin-top:90px">
         <div
-            class="img-container mt-3 z-3 p-1"
+            class="name-actor d-flex align-items-center justify-content-around mt-3" style="width: 18rem">
+          <h2 class="fw-bold"
+              :style="bannerStyle"
+              style="font-family: 'Bahnschrift', sans-serif; color: #374558;"
+          >
+            {{ person.name }}</h2>
+        </div>
+
+        <div
+            class="img-container  z-3 p-1"
             style="width:18rem;height: 420px;overflow: hidden;"
         >
           <img :src="person.profile_path ?'https://image.tmdb.org/t/p/w500'
@@ -160,15 +190,7 @@ function  extracTitle (role:string) : string {
           </div>
         </div>
       </div>
-      <div class="bio-name p-4 col-9" style="margin-top:87px">
-        <div class="name-actor d-flex align-items-start mb-2">
-          <h2 class="fw-bold"
-              :style="bannerStyle"
-              STYLE="font-family: 'Bahnschrift', sans-serif; color: #374558;"
-          >
-            {{ person.name }}</h2>
-        </div>
-
+      <div class="bio-name p-4 col-9" style="margin-top:130px">
         <div v-if="person.biography && person.biography.length > 0"
              class="bio-only d-flex flex-column align-items-start">
           <span class="fw-bold fs-5 mb-2 ">Biographie</span>
@@ -193,7 +215,15 @@ function  extracTitle (role:string) : string {
 
         <knownForPerson :filmsConnus="filmsConnus"/>
 
-        <ListCastAndCrew :perform="filmsConnus"/>
+        <ListCast :perform="filmsConnus.castMember"/>
+        <ListCrewProducer :perform="filmsConnus.crewMember"/>
+        <list-crew-writing :perform="filmsConnus.crewMember"/>
+        <list-crew-art :perform="filmsConnus.crewMember"/>
+        <list-crew-directing :perform="filmsConnus.crewMember"/>
+        <list-crew-editor :perform="filmsConnus.crewMember"/>
+        <list-crew-camera :perform="filmsConnus.crewMember"/>
+        <list-crew-equi-tech :perform="filmsConnus.crewMember"/>
+        <list-crew-sound :perform="filmsConnus.crewMember"/>
       </div>
 
     </div>

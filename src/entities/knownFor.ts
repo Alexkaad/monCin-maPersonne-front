@@ -4,5 +4,5 @@ import {CrewMember} from "@/entities/CrewMember";
 export interface KnownFor {
 
     castMember : CastMember[],
-    crewMember : CrewMember[],
+    crewMember : CrewMember[]
 }

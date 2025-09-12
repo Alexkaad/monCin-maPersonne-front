@@ -24,7 +24,8 @@ const bannerStyle = computed(() => ({
 </script>
 
 <template>
-  <div class="banner " :style="bannerStyle">
+  <div class=" container-fluid m-0 p-0 banner" style="position: sticky; top: 0; z-index: 1000; "
+       :style="bannerStyle">
     <div class="banner-content d-flex justify-content-center align-items-center ">
       <div class="poster-container">
         <img

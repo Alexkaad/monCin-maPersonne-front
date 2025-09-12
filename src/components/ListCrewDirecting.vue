@@ -1,12 +1,27 @@
 <script setup lang="ts">
-import {ref, computed} from "vue";
-import {KnownFor} from "@/entities/knownFor";
+import {computed, ref} from "vue";
 import router from "@/router";
+import {CrewMember} from "@/entities/CrewMember";
 
-const props = defineProps<{ perform: KnownFor }>();
+
+
+
+const props = defineProps<{ perform: CrewMember[] }>();
 const isExpanded = ref(false);
 
-const safePerform = computed(() => props.perform.castMember || []);
+const safeDirectinc = computed(() => props.perform.filter(item =>
+    item.department
+    ===
+    'Directing').sort((a, b) => {
+  if (!a.release_date) return 1;
+  if (!b.release_date) return -1;
+
+  const dateA = new Date(a.release_date).getTime();
+  const dateB = new Date(b.release_date).getTime();
+
+  return dateB - dateA; // du + récent au + ancien
+}));
+
 
 function toggle() {
   isExpanded.value = !isExpanded.value;
@@ -40,10 +55,14 @@ const navigateToDetail = (id: number, event?: Event) => {
     });
   }
 };
+
 </script>
 
 <template>
-  <table class="table border border-2 table-striped table-hover">
+
+  <table v-if=" safeDirectinc && safeDirectinc.length
+   > 0"
+         class="table border border-2  table-hover">
     <thead>
     <tr class="table-light">
       <th scope="col" colspan="2" style="background-color: #6c757d">
@@ -53,7 +72,8 @@ const navigateToDetail = (id: number, event?: Event) => {
             @click="toggle"
 
         >
-          <span class="text-black">Interpretation</span>
+          <span  class="text-black">
+            Réalisation</span>
           <div
               class="custom-arrow d-flex  p-1 border border-2 border-black rounded-circle"
               style="width: 1.9rem; ">
@@ -70,7 +90,8 @@ const navigateToDetail = (id: number, event?: Event) => {
     </thead>
 
     <tbody :class="{ collapse: true, show: isExpanded }">
-    <tr v-for="filmItem in safePerform" :key="filmItem.id"
+    <tr v-for="filmItem in  safeDirectinc"
+        :key="filmItem.id"
         @click="navigateToDetail(filmItem.id, $event)"
         style="cursor:pointer">
       <td style="width:10rem" v-if="filmItem.release_date">
@@ -82,14 +103,15 @@ const navigateToDetail = (id: number, event?: Event) => {
           <span style="width:13rem"
                 class="fw-bold">{{ formatTitle(filmItem.title) }}</span>
           <p style="width:15rem">
-            <span>Perform : </span>
-            <span class="fw-light">{{ filmItem.character }}</span>
+            <span style="color: #6c757d">Job : </span>
+            <span class="fw-light">{{ filmItem.job }}</span>
           </p>
         </div>
       </td>
     </tr>
     </tbody>
   </table>
+
 </template>
 
 <style scoped>

@@ -13,6 +13,7 @@ export interface CrewMember {
     job: string,
     backdrop_path?: string | null;
     title?: string;
+    release_date?: Date | string;
 }
 
 

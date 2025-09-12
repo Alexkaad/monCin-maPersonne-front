@@ -1,14 +1,7 @@
-export interface Crew
+import {CrewMember} from "@/entities/CrewMember";
+
+export interface Crews
 {
-    id?: number;
-    adult?: boolean;
-    credit_id?: number;
-    department: string
-    gender: number;
-    job: string;
-    known_for_department:string;
-    name:string;
-    original_name: string;
-    profile_path: string;
+    crews : CrewMember[];
 
 }

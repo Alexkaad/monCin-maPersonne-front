@@ -210,13 +210,14 @@ onMounted(() => {
         <div class="banner-placeholder"></div>
         Chargement...
       </div>
-      <div v-else>
+      <div v-else >
         <BaniereComponent
             :poster-url="'https://image.tmdb.org/t/p/w500' + film.poster_path"
             :release-date="film.release_date"
             :title="film.title"
         />
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center" style="z-index: -9999 ;
+        ">
           <div class="section-content ">
             <div class="section-title-longerActorRoles">
               <h4 class="section-title justify-content-start fw-bold text-black p-4">
@@ -714,6 +715,12 @@ onMounted(() => {
   flex-direction: column;
   column-gap: 3rem;
 }
+
+.cast-crew-view {
+  height: 100vh; /* pleine hauteur de l’écran */
+  overflow-y: auto; /* scroll interne */
+}
+
 
 .card-container {
   gap: 1rem;

@@ -15,10 +15,12 @@ import {CrewMember} from "@/entities/CrewMember";
 const route = useRoute();
 const person = ref<Person>();
 const biography = ref<Biography>();
+const cast = ref<CastMember[]>();
+const crewByDepartment = ref<Record<string, CrewMember[]>>({});
 const filmsConnus = ref<KnownFor>({
 
-  castMember : [] as CastMember[],
-  crewMember : [] as CrewMember[]
+  castMember :  [] as CastMember[],
+  crewMember: [] as CrewMember[]
 });
 const network = ref<{
   facebook_id: string,
@@ -29,6 +31,7 @@ const network = ref<{
   instagram_id: "",
   twitter_id: ""
 });
+
 
 
 
@@ -73,6 +76,19 @@ const fetchNetwork = async () => {
   }
 }
 
+const sortByDateCastAndCrew = (castMember: CastMember[]): void => {
+  castMember.sort((a, b) => {
+    if (!a.release_date) return 1;
+    if (!b.release_date) return -1;
+
+    const dateA = new Date(a.release_date).getTime();
+    const dateB = new Date(b.release_date).getTime();
+
+    return dateB - dateA; // du + récent au + ancien
+  });
+};
+
+
  const fetchPersonKnownFor = async () => {
    const personId = Number(route.params.id);
 
@@ -82,14 +98,15 @@ const fetchNetwork = async () => {
 
     const response = await movieService.getPersonMovieCredit(personId);
     console.log('voici le response de l"api:',response);
-    const cast : CastMember [] = response.cast || [];
-    const crew : CrewMember [] = response.crew || [];
-    filmsConnus.value = {
 
-      castMember : cast,
-      crewMember : crew
+    cast.value = (response.cast ?? []) as CastMember[];
+    crewByDepartment.value = response.crew ?? {};
+    filmsConnus.value = {
+      castMember : cast.value,
+      crewMember: Object.values(crewByDepartment.value).flat()
     }
-    console.log('voici la liste des films celebre de la personne:', filmsConnus.value);
+    console.log('voici la liste des films celebre de la personne:',
+        cast.value, crewByDepartment.value);
 
   }catch (error) {
     console.log(error);
@@ -122,6 +139,14 @@ onMounted(() => {
         :filmsConnus="filmsConnus"
         :person-name="person.name"
         :perfomm = "filmsConnus.castMember"
+        :crewProducer = "filmsConnus.crewMember"
+        :crewWriting = "filmsConnus.crewMember"
+        :crewArt = "filmsConnus.crewMember"
+        :crewDirecting = "filmsConnus.crewMember"
+        :crewEditor = "filmsConnus.crewMember"
+        :crewImage = "filmsConnus.crewMember"
+        :crewEquiTech="filmsConnus.crewMember"
+        :crewSound="filmsConnus.crewMember"
       />
 
   </div>

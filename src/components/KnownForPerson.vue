@@ -7,15 +7,26 @@ import {KnownFor} from "@/entities/knownFor";
 
 const props = defineProps<{
 
-  filmsConnus?: KnownFor;
+  filmsConnus: KnownFor;
 
 }>();
 
 
 const imageLoaded = ref<{ [key: number]: boolean }>({});
 
-// Assurer que castMember est toujours un tableau
-const safeCastMember = computed(() => props.filmsConnus?.castMember.slice(0, 8) || []);
+
+const safeCastMember = computed(() => {
+  return [...props.filmsConnus.castMember] // copie du tableau
+      .sort((a, b) => {
+        if (!a.release_date) return 1;
+        if (!b.release_date) return -1;
+
+        const dateA = new Date(a.release_date).getTime();
+        const dateB = new Date(b.release_date).getTime();
+
+        return dateB - dateA; // du + récent au + ancien
+      }).slice(0, 8);
+});
 
 const handleImageLoad = (filmId: number) => {
   imageLoaded.value[filmId] = true;
@@ -31,6 +42,8 @@ const formatTitle = (title: string | undefined, limit = 24) => {
   return title.length > limit ? title.substring(0, limit) + '...' : title;
 
 }
+
+
 
 
 const navigateToDetail = (id: number, event?: Event) => {

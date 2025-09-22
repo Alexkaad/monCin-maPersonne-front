@@ -1,21 +1,19 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import {useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
 
 
-
 const router = useRouter();
 
-const goToUpcoming = async (event : Event) => {
+const goToUpcoming = async (event: Event) => {
 
-  if(event?.preventDefault)
-  {
+  if (event?.preventDefault) {
     event.preventDefault();
   }
   try {
 
-    await router.push({ name: 'UpcomingMovies' })
+    await router.push({name: 'UpcomingMovies'})
     // ou si vous préférez utiliser le chemin
     // await router.push('/popular')
   } catch (error) {
@@ -23,9 +21,8 @@ const goToUpcoming = async (event : Event) => {
   }
 }
 
-const goToPopular = async (event : Event) => {
-  if(event?.preventDefault)
-  {
+const goToPopular = async (event: Event) => {
+  if (event?.preventDefault) {
     event.preventDefault();
   }
 
@@ -40,22 +37,37 @@ const goToPopular = async (event : Event) => {
 
 }
 
-const goToNowPlaying = async (event : Event) => {
+const goToNowPlaying = async (event: Event) => {
 
-  if(event?.preventDefault)
-  {
+  if (event?.preventDefault) {
     event.preventDefault();
   }
 
   try {
 
-    await router.push({ name: 'NowPlayingMovies' })
+    await router.push({name: 'NowPlayingMovies'})
     // ou si vous préférez utiliser le chemin
     // await router.push('/popular')
   } catch (error) {
     console.error('Erreur de navigation:', error)
   }
 }
+
+const goToAirOnToday = async (event: Event) => {
+
+  if (event?.preventDefault) {
+    event.preventDefault();
+  }
+  try {
+
+    await router.push({name: 'OnTheAir'})
+    // ou si vous préférez utiliser le chemin
+    // await router.push('/popular')
+  } catch (error) {
+    console.error('Erreur de navigation:', error)
+  }
+}
+
 
 const showHeader = ref(true);
 let lastScroll = 0;
@@ -74,6 +86,7 @@ const handleScroll = () => {
   lastScroll = currentScroll <= 0 ? 0 : currentScroll; // éviter scroll négatif
 };
 
+
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
 });
@@ -88,52 +101,89 @@ onMounted(() => {
   >
     <div class="container d-flex align-items-center p-1 ">
       <!-- Logo group -->
-      <div class ="logo-group d-flex justify-content-between" style="width: 28%">
-      <div class="logo-group">
-        <h1 class="mb-0 fs-1 fw-bold titre-style" style="font-weight:900">MyCP</h1>
-        <i class="bi bi-camera-reels fw-bold text-black"></i>
-      </div>
+      <div class="logo-group d-flex justify-content-between" style="width: 28%">
+        <div class="logo-group">
+          <h1 class="mb-0 fs-1 fw-bold titre-style" style="font-weight:900">
+            MyCP</h1>
+          <i class="bi bi-camera-reels fw-bold text-black"></i>
+        </div>
 
-      <!-- Navigation links -->
-      <div class="dropdown ">
+        <!-- Navigation links -->
+        <div class="dropdown ">
+          <a
+              aria-expanded="false"
+              class=" dropdown-toggle"
+              data-bs-toggle="dropdown"
+              style="font-size: 18px;font-weight: bold;"
+              type="button"
+
+          >
+            Film
+          </a>
+          <ul class="dropdown-menu list-unstyled fw-bold ">
+            <li
+                class="dropdown-item"
+                style="font-size: 15px"
+                @click="goToUpcoming"
+            >À venir
+            </li>
+            <li
+                class="dropdown-item fs-6"
+                style="font-size: 15px"
+                @click="goToPopular">
+              Populaire
+            </li>
+            <li
+                class="dropdown-item fs-6"
+                style="font-size: 15px"
+                @click="goToNowPlaying"
+            >
+              En salle
+            </li>
+          </ul>
+        </div><div class="dropdown ">
         <a
-            class=" dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
             aria-expanded="false"
+            class=" dropdown-toggle"
+            data-bs-toggle="dropdown"
             style="font-size: 18px;font-weight: bold;"
+            type="button"
 
         >
-          Film
+          Serie
         </a>
         <ul class="dropdown-menu list-unstyled fw-bold ">
           <li
-              @click="goToUpcoming"
               class="dropdown-item"
               style="font-size: 15px"
-          >À venir
+              @click="goToAirOnToday"
+          >À Télé
           </li>
           <li
-              @click="goToPopular"
               class="dropdown-item fs-6"
-              style="font-size: 15px">
+              style="font-size: 15px"
+              @click="goToPopular">
             Populaire
           </li>
           <li
-              @click="goToNowPlaying"
               class="dropdown-item fs-6"
               style="font-size: 15px"
+              @click="goToNowPlaying"
           >
             En salle
           </li>
         </ul>
       </div>
       </div>
-      <!-- User icon -->
-      <div class="icon-person">
-        <i class="bi bi-person text-black fs-4 fw-bolder"></i>
+
       </div>
+
+
+    <!-- User icon -->
+    <div class="icon-person">
+      <i class="bi bi-person text-black fs-4 fw-bolder"></i>
     </div>
+
   </nav>
 
 
@@ -159,11 +209,13 @@ onMounted(() => {
 .dropdown-toggle::after {
   display: none !important;
 }
-.dropdown-toggle:hover{
+
+.dropdown-toggle:hover {
   cursor: pointer;
   color: #42b983;
 
 }
+
 .logo-group {
   display: flex;
   align-items: center;

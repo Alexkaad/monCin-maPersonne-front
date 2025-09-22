@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import {ref} from "vue";
 import OfficielTrailer from "@/components/officielTrailer.vue";
@@ -6,12 +6,17 @@ import {SortedTrailers, Trailer} from "@/entities/Trailer";
 import {useRoute} from "vue-router";
 import {useColorStore} from "@/store/ColorStore";
 import {Film} from "@/entities/Film";
+import {CreatedBy} from "@/entities/CreatedBy";
+import {flatrate, ProviderTv} from "@/entities/ProviderTv";
 
 
 const props = defineProps<{
 
-  film:Film,
-  sortedTrailers: SortedTrailers,
+
+  sortedTrailers?: SortedTrailers,
+  media: Film | undefined;
+  provider?: ProviderTv;
+
 
 }>();
 
@@ -22,12 +27,21 @@ const colorStore = useColorStore();
 
 const handlePosterLoad = () => {
   posterLoad.value = true;
-  const imageUrl = `https://image.tmdb.org/t/p/w500${props.film.poster_path}`;
+  const imageUrl = `https://image.tmdb.org/t/p/w500${props.media?.poster_path}`;
   colorStore.extractDominantColor(imageUrl);
 };
 
-const formatDate = (date: Date | string) => {
-  return new Date(date).toLocaleDateString('fr-FR')
+const formatDate = (date: Date | string | undefined) => {
+  return new Date(date || '').toLocaleDateString('fr-FR')
+}
+
+const formatDateYear = (date: Date | string) => {
+  return formatDate(date).split('/')[2]
+}
+
+const nameCreatedBy = (createdBy: CreatedBy []) => {
+
+  return createdBy.map(createdBy => createdBy.name).join(', ')
 }
 
 
@@ -43,6 +57,20 @@ const formatRuntime = (runtime: string | number) => {
   return `${hours}h ${remainingMinutes}min`;
 };
 
+const filerLogo_path = (flatrates: flatrate []): flatrate | undefined => {
+  return flatrates[0]
+
+}
+
+import { computed } from "vue";
+
+const hasCreators = computed(() => {
+  return props.media?.created_by && props.media.created_by.length > 0;
+});
+
+const creators = computed(() => props.media?.created_by || []);
+
+
 const openTrailerModal = (trailer: Trailer) => {
   if (officielTrailerRef.value) {
     officielTrailerRef.value.openModal(trailer.key);
@@ -50,77 +78,137 @@ const openTrailerModal = (trailer: Trailer) => {
 };
 
 
-
 </script>
 
 <template>
 
-  <div v-if="props.film" class="background-wrapper "
-       :style="props.film.backdrop_path? {
-         backgroundImage: `url(https://image.tmdb.org/t/p/original${props.film.backdrop_path})`
-       } : {}" style="margin-top: 70px">
+  <div v-if="props.media" :style="props.media.backdrop_path? {
+         backgroundImage:
+         `url(https://image.tmdb.org/t/p/original${props.media.backdrop_path})`
+       } : {}"
+       class="background-wrapper " style="margin-top: 60px;">
     <div class="overlay"></div>
-    <div class="content-wrapper d-flex ">
+    <div class="content-wrapper d-flex  ">
       <div class="container mt-5 ">
-        <div class="row align-items-start">
-          <div class="col-md-4 ">
-            <div class="poster-container">
-              <img :src="'https://image.tmdb.org/t/p/w500'+props.film.poster_path || '@/assets/OIP.jpg'"
-                   class="film-poster"
-                   @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
-                   @load="handlePosterLoad"
-                   alt="image-film">
+        <div class="row align-items-start ">
+          <div class="col-md-4  w-auto poster-film-provider ">
+            <div class="poster-container ">
+              <img
+                  :src="'https://image.tmdb.org/t/p/w500'+props.media.poster_path || '@/assets/OIP.jpg'"
+                  alt="image-film"
+                  class="film-poster"
+                  @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
+                  @load="handlePosterLoad">
+            </div>
+            <div v-if="props.provider && filerLogo_path(props.provider.flatrate)"
+                class="providers d-flex justify-content-start align-items-center"
+                style=" padding: 2px 0 0 40px; background-color: #032541; "
+            >
+              <div v-if="props.provider &&
+            filerLogo_path(props.provider?.flatrate)" class="poster-provider"
+                   style="padding:
+            0.2rem">
+                <img
+                    :alt="filerLogo_path(props.provider.flatrate)?.logo_path"
+                    :src="'https://image.tmdb.org/t/p/w500' +
+                    filerLogo_path(props.provider.flatrate)?.logo_path"
+                    style="width: 2.3rem; "
+                    @error="($event.target as HTMLImageElement).src = require('@/assets/OIP.jpg')"
+                    @load="handlePosterLoad"
+                />
+
+              </div>
+              <div v-if="props.provider && filerLogo_path(props.provider.flatrate)"
+                  class="box-close d-flex flex-column align-items-start p-1 " >
+              <span style="color: #6c757d; font-style: oblique; font-size:
+              0.9rem">
+                Disponible en streaming
+              </span>
+                <span style="color: white ; font-style: oblique; font-size: 0.9rem">
+                Regarder Maintenant
+              </span>
+              </div>
             </div>
           </div>
           <div class="col-md-8 d-flex flex-column justify-content-start">
-            <div class="film-info">
-              <h6 class="film-title text-start">{{ props.film.title }}</h6>
-              <div class="tagline text-start">{{ props.film.tagline }}</div>
+            <div
+                class="film-info">
+              <h6 class="film-title text-start">
+                {{ props.media.title || props.media.original_name }}
+                ({{
+                  formatDateYear(props.media.release_date ||
+                      props.media.first_air_date)
+                }})
+              </h6>
+              <div class="tagline text-start">{{ props.media.tagline }}</div>
               <div class="meta-info">
                 <div class="info-item">
                   <i class="bi bi-calendar"></i>
-                  <span>{{formatDate(props.film.release_date) }}</span>
+                  <span v-if="props.media">
+  {{ formatDate(props.media.release_date || props.media.first_air_date) }}
+                   </span>
+
                 </div>
-                <div class="info-item">
+                <div v-if="media && media.runtime" class="info-item">
                   <i class="bi bi-clock"></i>
-                  <span>{{ formatRuntime(props.film.runtime) }}</span>
+                  <span>{{
+                      formatRuntime(props.media?.runtime)
+                    }}</span>
                 </div>
                 <div class="info-item">
                   <i class="bi bi-globe"></i>
-                  <span>{{ props.film.original_language }}</span>
+                  <span v-if="props.media">{{
+                      props.media.original_language
+                    }}</span>
                 </div>
               </div>
-              <div class="genre-bande d-flex justify-content-start align-items-center ">
+              <div
+                  class="genre-bande d-flex justify-content-start align-items-center ">
                 <div class="genres">
-                <span v-for="genre in props.film.genres"
+                <span v-for="genre in props.media.genres"
                       :key="genre.id"
                       class="genre-tag bg-primary text-white">
                   {{ genre.name }}
                 </span>
                 </div>
                 <div class="bande-annonce" style="padding: 0 0 15px 15px">
-                  <button class="official-trailer btn btn-warning text-black"
-                          v-if="sortedTrailers.mainTrailer"
-                          @click="openTrailerModal(sortedTrailers.mainTrailer)"
+                  <button v-if="sortedTrailers?.mainTrailer"
+                          class="official-trailer btn btn-warning text-black"
                           style=" border-radius: 20px;
                           font-weight: bold;
                           padding: 0.1rem 0.35rem;
                           font-size: 0.70rem;"
+                          @click="openTrailerModal(sortedTrailers.mainTrailer)"
 
                   >
                     Voir la bande-annonce
                   </button>
                   <OfficielTrailer
                       ref="officielTrailerRef"
-                      :trailer="sortedTrailers.mainTrailer"
                       :film-id="Number(route.params.id)"
+                      :trailer="sortedTrailers?.mainTrailer"
                   />
                 </div>
               </div>
 
               <div class="synopsis text-start">
                 <h3>Synopsis</h3>
-                <p style="text-align: justify">{{props.film.overview }}</p>
+                <p style="text-align: justify">{{ props.media.overview }}</p>
+              </div>
+              <div
+                  v-if="hasCreators "
+                  class="created-by text-start">
+                <div
+                     class="info-created ">
+                  <p class="d-flex">
+                    <span class="fw-semibold me-2">Créateurs(ices) : </span>
+                    <span class="text-primary">{{
+                        nameCreatedBy(creators)
+                      }}</span>
+
+                  </p>
+                </div>
+
               </div>
             </div>
           </div>
@@ -135,12 +223,12 @@ const openTrailerModal = (trailer: Trailer) => {
 .background-wrapper {
   position: relative;
   width: 100%;
-  height: 550px !important ;
+  height: 600px !important;
   background-size: cover;
   background-position: top center;
   background-attachment: scroll;
   background-repeat: no-repeat;
-  margin-top: 60px; /* Espace pour la navbar */
+  margin-top: 70px; /* Espace pour la navbar */
 
 }
 
@@ -155,22 +243,31 @@ const openTrailerModal = (trailer: Trailer) => {
 
 .content-wrapper {
   position: relative;
-  padding-top: 30px;
+  padding-top: 20px;
   z-index: 2;
 
 
 }
 
-.poster-container {
-  margin-bottom: 1rem;
-  height: 100% ;
-
+.poster-film-provider {
+  height: 100%;
 
 }
 
+.providers {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.poster-container{
+  border-top-left-radius: 5px;
+  overflow: hidden;
+  border-top-right-radius: 5px;
+}
+
 .film-poster {
-  width: 270px ! important;
-  border-radius: 10px;
+  width: 300px ! important;
+
 
 
 }
@@ -262,7 +359,6 @@ const openTrailerModal = (trailer: Trailer) => {
   }
 
 
-
   .synopsis p {
     line-height: 1.3 !important;
     font-size: 1rem !important;
@@ -273,13 +369,13 @@ const openTrailerModal = (trailer: Trailer) => {
 
   }
 
-  .genre-bande{
+  .genre-bande {
 
-    display: flex!important;
-    flex-direction: column!important;
-    align-items: flex-start!important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
     justify-content: center !important;
-    gap: 0.20rem!important;
+    gap: 0.20rem !important;
   }
 
   .content-wrapper {
@@ -291,7 +387,7 @@ const openTrailerModal = (trailer: Trailer) => {
   .row {
     flex-direction: column;
     padding: 0;
-    margin: 0;  /* Supprime les marges négatives */
+    margin: 0; /* Supprime les marges négatives */
   }
 
   .col-md-4, .col-md-8 {
@@ -319,18 +415,18 @@ const openTrailerModal = (trailer: Trailer) => {
   }
 
   .film-title {
-    font-size: 2.5rem;  /* Réduit de 3rem */
+    font-size: 2.5rem; /* Réduit de 3rem */
     text-align: center;
   }
 
   .tagline {
-    font-size: 1.5rem ! important;  /* Réduit de 2rem */
+    font-size: 1.5rem ! important; /* Réduit de 2rem */
     text-align: center;
     margin-bottom: 1rem;
   }
 
   .meta-info {
-    font-size: 1.5rem ! important;  /* Réduit de 1.5rem */
+    font-size: 1.5rem ! important; /* Réduit de 1.5rem */
     flex-direction: column;
     align-items: start;
     gap: 1rem;
@@ -354,13 +450,13 @@ const openTrailerModal = (trailer: Trailer) => {
   }
 
   .synopsis h3 {
-    font-size: 1.7rem ! important;  /* Réduit de 2rem */
+    font-size: 1.7rem ! important; /* Réduit de 2rem */
     margin-bottom: 0.8rem;
     text-align: left;
   }
 
   .synopsis p {
-    font-size: 1.5rem !important;  /* Réduit de 1.3rem */
+    font-size: 1.5rem !important; /* Réduit de 1.3rem */
     line-height: 1.5;
     word-wrap: break-word ! important;
     overflow-wrap: break-word ! important;
@@ -402,9 +498,10 @@ const openTrailerModal = (trailer: Trailer) => {
     padding: 10px;
     box-sizing: border-box;
   }
+
   .content-wrapper {
 
-    margin:0;
+    margin: 0;
     padding: 0;
   }
 
@@ -429,8 +526,9 @@ const openTrailerModal = (trailer: Trailer) => {
   }
 
   .genres {
-    margin-bottom: 0.40rem!important;
+    margin-bottom: 0.40rem !important;
   }
+
   .info-item {
     display: flex;
     align-items: center;
@@ -448,8 +546,8 @@ const openTrailerModal = (trailer: Trailer) => {
   }
 
   .synopsis {
-    margin-top: 0.40rem!important;
-    padding: 0 5px!important;
+    margin-top: 0.40rem !important;
+    padding: 0 5px !important;
   }
 
   .synopsis p {
@@ -462,7 +560,7 @@ const openTrailerModal = (trailer: Trailer) => {
     text-align: justify;
     line-height: 1;
     box-sizing: border-box;
-    font-size: 0.65rem!important;
+    font-size: 0.65rem !important;
   }
 
   .row {
@@ -475,13 +573,13 @@ const openTrailerModal = (trailer: Trailer) => {
   }
 
   .film-info {
-    margin-top: 0.10rem!important;
+    margin-top: 0.10rem !important;
     padding: 0;
   }
 
-  .official-trailer{
+  .official-trailer {
 
-   width: 5.5rem !important;
+    width: 5.5rem !important;
     font-size: 0.40rem !important;
 
 

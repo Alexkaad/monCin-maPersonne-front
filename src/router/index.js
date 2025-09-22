@@ -52,11 +52,17 @@ const routes = [
         component: () => import('@/views/NotFound.vue') // Créez ce composant
     },
 
-
-
-
-
-
+    {
+        path:'/onTheAir',
+        name:'OnTheAir',
+        component: () => import('@/views/OnTheAirTv.vue')
+    },
+    {
+        path:'/series/:id',
+        name:'SerieSingle',
+        component: () => import('@/views/SerieSingle.vue'),
+        props: true
+    }
 ]
 
 

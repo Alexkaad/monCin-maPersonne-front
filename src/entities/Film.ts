@@ -1,4 +1,6 @@
 import {Genre} from "@/entities/Genre";
+import {CreatedBy} from "@/entities/CreatedBy";
+import {Networks} from "@/entities/Networks";
 
 export interface Film {
 
@@ -14,4 +16,9 @@ export interface Film {
     runtime: string; // ex: "01:45"
     tagline: string;
     title: string;
+    first_air_date?: Date;
+    name?: string;
+    created_by?: CreatedBy [];
+    networks?: Networks [];
+    original_name? : string;
 }

@@ -9,7 +9,8 @@ import TraillerMovie from "@/components/traillerMovie.vue";
 import {SortedTrailers, Trailer} from "@/entities/Trailer";
 import CardRecommendation from "@/components/CardRecommendation.vue";
 import {Film} from "@/entities/Film";
-import {mapCasting} from "@/entities/CastMember";
+import {CastMember, mapCasting} from "@/entities/CastMember";
+import CastAndCrew from "@/views/CastAndCrew.vue";
 
 
 
@@ -17,7 +18,7 @@ import {mapCasting} from "@/entities/CastMember";
 
 const film = ref<Film>();
 
-const cast = ref<any[]>([]);
+const cast = ref<CastMember[]>([]);
 const sortedTrailer = ref<SortedTrailers>({
   mainTrailer: undefined,
   otherVideos: []
@@ -58,7 +59,7 @@ const LoadFilmSingle = async () => {
       runtime: response.runtime,
       backdrop_path: response.backdrop_path,
       tagline: response.tagline,
-      original_language: response.spoken_languages?.map((lang: any) => lang.name).join(', ') || '',
+      original_language: response.original_language,
       original_title: response.original_title,
     };
     console.log("Film mappé:", film);
@@ -259,7 +260,7 @@ onMounted(() => {
     </div>
     <div  v-else>
       <DetailFilm
-          :film="film"
+          :media="film"
           :sorted-trailers="sortedTrailer"
       />
     </div>

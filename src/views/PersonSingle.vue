@@ -76,18 +76,6 @@ const fetchNetwork = async () => {
   }
 }
 
-const sortByDateCastAndCrew = (castMember: CastMember[]): void => {
-  castMember.sort((a, b) => {
-    if (!a.release_date) return 1;
-    if (!b.release_date) return -1;
-
-    const dateA = new Date(a.release_date).getTime();
-    const dateB = new Date(b.release_date).getTime();
-
-    return dateB - dateA; // du + récent au + ancien
-  });
-};
-
 
  const fetchPersonKnownFor = async () => {
    const personId = Number(route.params.id);

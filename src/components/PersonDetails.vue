@@ -17,7 +17,6 @@ import ListCrewEditor from "@/components/ListCrewEditor.vue";
 import ListCrewCamera from "@/components/ListCrewCamera.vue";
 import ListCrewEquiTech from "@/components/ListCrewEquiTech.vue";
 import ListCrewSound from "@/components/ListCrewSound.vue";
-import {CastMember} from "@/entities/CastMember";
 
 
 
@@ -52,27 +51,8 @@ const formatDate = (date: Date | string) => {
   return new Date(date).toLocaleDateString('fr-FR').replace(/\//g, '-');
 }
 
-const sortByDateCastAndCrew = (castMember: CastMember[]): void => {
-  castMember.sort((a, b) => {
-    if (!a.release_date) return 1;
-    if (!b.release_date) return -1;
 
-    const dateA = new Date(a.release_date).getTime();
-    const dateB = new Date(b.release_date).getTime();
 
-    return dateB - dateA; // du + récent au + ancien
-  });
-};
-
-const formatTitle = (title: string | undefined, limit = 24) => {
-
-  if (!title) {
-
-    return '';
-  }
-  return title.length > limit ? title.substring(0, limit) + '...' : title;
-
-}
 
 function  extracTitle (role:string) : string {
 

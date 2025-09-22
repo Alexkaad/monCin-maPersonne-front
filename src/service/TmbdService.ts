@@ -155,6 +155,40 @@ async getPersonMovieCredit(id: number) {
             console.error('Erreur:', error.response?.data || error);
             throw error;
         }
+},
+
+async getSerieTvOnAir(page = 1) {
+
+        try {
+        const response =
+            await apiClient.get('/series/on_the_air', {
+                params: {page}
+            });
+        return response.data;
+        }catch (error: any) {
+            console.error('Erreur:', error.response?.data || error);
+            throw error;
+        }
+},
+
+async getSerieById(id: number) {
+
+        try {
+            const response =
+                await apiClient.get(`/series/${id}`);
+            return response.data;
+        }catch (error: any) {
+            console.error('Erreur:', error.response?.data || error);
+        }
+},
+async getWatchProviderTv(id: number) {
+
+        try {
+            const response =
+                await apiClient.get(`/series/${id}/watch/provider`);
+            return response.data;
+        }catch (error: any) {}
+
 }
 
 

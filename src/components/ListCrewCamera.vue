@@ -43,9 +43,6 @@ const formatTitle = (title: string | undefined, limit = 20) => {
 
 }
 
-
-
-
 const navigateToDetail = (id: number, event?: Event) => {
   if (event?.preventDefault) {
     event.preventDefault();

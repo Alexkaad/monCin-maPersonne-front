@@ -2,16 +2,12 @@
 
 import {computed, ref} from "vue";
 import router from "@/router";
+import {CastMember} from "@/entities/CastMember";
 
 
 const props = defineProps<{
-  cast: Array<{
-    id: number,
-    name: string,
-    character: string,
-    poster_path: string,
-    order: number,
-  }>
+  cast: CastMember[]
+
 }>();
 
 
